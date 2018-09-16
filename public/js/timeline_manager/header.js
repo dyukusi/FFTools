@@ -68,6 +68,7 @@ $(function () {
 
       if ($this.hasClass('disabled')) return;
       $this.addClass('disabled');
+      $("#login-wrong-email-or-password").hide();
 
       var email = $("#login-email-input").val();
       var password = $("#login-password-input").val();
@@ -115,8 +116,11 @@ $(function () {
             $this.html($this.data('original-text'));
             $('#login-modal').modal('hide');
           } else {
-            console.log("Login failed")
-            // TODO failed process
+            $("#login-wrong-email-or-password").show();
+            $this.html($this.data('original-text'));
+            setTimeout(function() {
+              $this.removeClass('disabled');
+            }, 2000);
           }
         });
 

@@ -1,3 +1,12 @@
+#login-wrong-email-or-password {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 100%;
+    color: #CC0000;
+    text-align: right;
+}
+
 .made-by-row:hover::after span {
     text-decoration: underline;
 }
@@ -163,7 +172,6 @@ html {
     width: 50%;
     max-width: 50%;
 }
-
 
 .my-modal-content {
     width: 100%;

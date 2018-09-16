@@ -44,6 +44,10 @@ router.post('/', function (req, res, next) {
         res.send({ success: false, });
       }
     })
+    .fail(function(error) {
+      res.send({ success: false, });
+      throw new Error(error);
+    });
 });
 
 module.exports = router;
