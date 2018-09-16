@@ -1,0 +1,127 @@
+<nav id="my-navbar" class="navbar navbar-expand navbar-dark bg-dark fixed-top my-nav-bar">
+  <a class="navbar-brand" href="#">FFXIV</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navigation bar -->
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" id="nav-about">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+      <li class="nav-item" id="nav-fftimelines">
+        <a class="nav-link" href="/fftimelines">FFTimelines(beta)</a>
+      </li>
+    </ul>
+
+    <img class="my-char-img float-right display-none" id="my-char-img" src="">
+
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown display-none" id="navbar-my-account">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span id="login_name"></span></a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <button class="dropdown-item my-dropdown-item" id="logout-button">Logout</button>
+        </div>
+      </li>
+    </ul>
+
+    <button type="button" class="btn btn-outline-primary my-btn-padding right-angle-button display-none" id="open-login-modal-button">Login</button>
+    <button type="button" class="btn btn-outline-primary my-btn-padding right-angle-button display-none" id="open-registry-modal-button">Sign Up</button>
+  </div>
+</nav>
+
+<!-- Login Modal -->
+<div class="modal fade" id="login-modal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+    <div class="modal-content my-modal-content">
+      <div class="modal-header my-modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body my-modal-body">
+        <form>
+          <fieldset>
+            <div class="form-group my-form-group">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" id="login-email-input" aria-describedby="emailHelp" placeholder="Enter email">
+              <div class="invalid-feedback">Invalid Email</div>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="login-password-input" placeholder="Password">
+              <div class="invalid-feedback">Invalid Password</div>
+            </div>
+          </fieldset>
+        </form>
+
+      </div>
+      <div class="modal-footer my-modal-footer">
+        <button type="button" class="btn btn-primary" id="login-button">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Registry Modal -->
+<div class="modal fade" id="registry-modal" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+    <div class="modal-content my-modal-content">
+      <div class="modal-header my-modal-header">
+      <h5 class="modal-title">Registration</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body my-modal-body">
+
+        <form>
+          <fieldset>
+            <div class="form-group my-form-group">
+              <span class="my-modal-main-text">Your Loadstone URL</span>
+              <input type="text" class="form-control" id="loadstone_url_input" placeholder="Enter your Loadstone URL">
+              <div class="invalid-feedback">Invalid URL</div>
+              <small id="emailHelpaa" class="form-text my-modal-sub-text">Search your character from <a href="https://eu.finalfantasyxiv.com/lodestone/character/" target="_blank">HERE</a> to get your Loadstone URL.</small>
+              <small id="emailHelp" class="form-text my-modal-sub-text">e.g. <a href="https://eu.finalfantasyxiv.com/lodestone/character/18968752/" target="_blank">https://eu.finalfantasyxiv.com/lodestone/character/18968752/</a></small>
+            </div>
+            <div class="form-group my-form-group">
+              <span class="my-modal-main-text">Email</span>
+              <input type="email" class="form-control" id="new_email_input" aria-describedby="emailHelp" placeholder="Enter email">
+              <div class="invalid-feedback">Invalid Email address</div>
+              <small id="emailHelp" class="form-text my-modal-sub-text">We'll never share your email with anyone else.</small>
+              <small id="emailHelp" class="form-text my-modal-sub-text">Correct Email is required to complete registration.</small>
+            </div>
+            <div class="form-group">
+              <span class="my-modal-main-text">Password</span>
+              <input type="password" class="form-control" id="new_password_input" placeholder="Enter Password">
+              <div class="invalid-feedback">Password must be longer than 5 characters</div>
+            </div>
+          </fieldset>
+          <div class="modal-footer my-modal-footer">
+            <button type="button" id="registry-button" class="btn btn-primary" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">Registry</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Registration Success Modal -->
+<div class="modal" id="registration-success-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Provisional Registration completed!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>The instractions to activate your account have been sent to your E-Mail address.</p>
+      </div>
+    </div>
+  </div>
+</div>

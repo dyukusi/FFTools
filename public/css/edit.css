@@ -1,0 +1,321 @@
+#bottom {
+    overflow-y: hidden;
+}
+
+/* All headers */
+.handsontable th {
+    background-color: #F00;
+}
+
+/* Row headers */
+.ht_clone_left th {
+    background-color: #F00;
+}
+
+/* Column headers */
+.ht_clone_top th {
+    background-color: #F00;
+}
+
+/*.ht_master .wtHolder {*/
+/*overflow-y: hidden;*/
+/*}*/
+
+/*#handsontable {*/
+/*height: 8771.99px;*/
+/*overflow-y: hidden;*/
+/*}*/
+
+/*#bottom {*/
+/*height: 10000% !important;*/
+/*}*/
+
+/*.ht_clone_left {*/
+/*height: 100% !important;*/
+/*}*/
+
+/*#bottom {*/
+    /*overflow: hidden;*/
+/*}*/
+
+/* Row headers */
+/*.ht_clone_left th {*/
+/*background-color: #F00;*/
+/*}*/
+
+/*!* Column headers *!*/
+/*.ht_clone_top th {*/
+/*background-color: #F00;*/
+/*}*/
+
+/*#handsontable td, #handsontable tr, #handsontable th {*/
+    /*border:  1px solid blue;*/
+/*}*/
+
+#handsontable tr:first-child td, #handsontable tr:first-child th, #handsontable tr{
+    border-top: 1px solid black;
+}
+
+#handsontable tr, #handsontable td, #handsontable th {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#handsontable tr {
+    background: black;
+}
+
+/*.handsontable tr {*/
+    /*border-top:1px solid black !important;*/
+    /*border-bottom:1px solid black !important;*/
+/*}*/
+
+#handsontable .htNoFrame + td, #handsontable .htNoFrame + th, #handsontable.htRowHeaders thead tr th:nth-child(2), #handsontable td:first-of-type, #handsontable th:first-child, #handsontable th:nth-child(2) {
+    border-left: 1px solid black;
+}
+
+.handsontable tbody th.ht__highlight, .handsontable thead th.ht__highlight {
+    background-color: #3766c9;
+}
+
+.handsontable td.area {
+    background-color: #1e376c;
+}
+
+/*th,td {*/
+/*border: 1px solid white !important;*/
+/*}*/
+
+.rowHeader, .colHeader {
+    color: white;
+}
+
+.handsontable th {
+    background-color: #19194d;
+}
+
+/* #19194d */
+
+.handsontableInput {
+    background-color: black !important;
+    color: #ccc9cc;
+}
+
+
+.ht_master tr td {
+    /* cell background color */
+    background-color: #262626;
+}
+
+.handsontable table {
+    /* cell text color */
+    color: #ccc9cc;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-left: 0rem;
+    padding-right: 0rem;
+    /*background-color: #F6F6F6;*/
+    box-sizing: border-box;
+}
+
+.split {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    /*overflow-y: auto;*/
+    overflow-x: hidden;
+}
+
+.content {
+    border: 1px solid #282828;
+    /*box-shadow: inset 0 1px 4px #e4e4e4;*/
+    /*background-color: #fff;*/
+    word-wrap: break-word;
+}
+
+.gutter {
+    background-color: transparent;
+
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-vertical {
+    cursor: row-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=')
+}
+
+.gutter.gutter-horizontal {
+    cursor: col-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==')
+}
+
+.split.split-horizontal, .gutter.gutter-horizontal {
+    height: 100%;
+    float: left;
+}
+
+/* skill imgs */
+.card-body {
+    padding: 5px;
+}
+
+img.draggable-skill {
+    width: 50px;
+    height: 50px;
+}
+
+.role-tank {
+    background-color: #1366a5;
+    margin: 5px;
+}
+
+.role-healer {
+    background-color: #235923;
+    margin: 5px;
+}
+
+.role-melee {
+    background-color: #51000e;
+    margin: 5px;
+}
+
+.role-physical-ranged {
+    background-color: #51000e;
+    margin: 5px;
+}
+
+.role-magical-ranged {
+    background-color: #51000e;
+    margin: 5px;
+}
+
+.role-common {
+    background-color: #3c3b3b;
+    margin: 5px;
+}
+
+.card-timeline-info {
+    /*border: 1px solid #4242ce;*/
+    background-color: black;
+    margin: 5px;
+}
+
+.job-title img {
+    width: 50px;
+    height: 50px;
+}
+
+.job-title {
+    text-shadow:2px 2px 4px #000000;
+    color: white;
+    font-weight: bold;
+    font-size: 200%;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+#right {
+    overflow: hidden;
+}
+
+.material-tab-img {
+    width: 2rem;
+    height: 2rem;
+}
+
+#edit-navbar {
+    background-color: #19194d !important;
+}
+
+#edit-navbar .nav-link {
+    padding: 0.1rem;
+}
+
+.my-alert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+
+.alert{
+    display: none;
+    z-index: 999999;
+}
+
+.htContextMenu table tbody tr td.current, .htContextMenu table tbody tr td.zeroclipboard-is-hover {
+    background: #3d86db;
+}
+
+.htContextMenu table tbody tr td {
+    background: #262626;
+}
+
+#timeline-info button {
+    margin-bottom: 3px;
+}
+
+.creator-char-img img {
+    height: 2rem;
+    width: 2rem;
+}
+
+.made-by-char-name {
+    font-weight: bold;
+    color: white;
+    text-shadow:2px 2px 4px #747474;
+}
+
+.timeline-title {
+    text-shadow:2px 2px 4px #808080;
+    color: white;
+    font-weight: bold;
+    font-size: 200%;
+    display: inline-block;
+    width: 100%;
+}
+
+.sub-menu-button {
+    width: 100%;
+    height: 100%;
+}
+
+.timeline-info-text {
+    color: white;
+    font-weight: bold;
+    /*font-size: 125%;*/
+}
+
+.sub-info-content-img {
+    width: 1rem;
+    height: 1rem;
+}
+
+#tweet-button {
+    margin-bottom: 0.5rem;
+}
+
+.over-skill-icon {
+    width: 500px;
+}
+
+.my-draggable {
+    cursor: move;
+}
+
+.my-draggable:hover {
+    -webkit-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+    -moz-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+    box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+
+    -webkit-border-radius: 60em;
+    -moz-border-radius: 60em;
+    border-radius: 60em;
+}

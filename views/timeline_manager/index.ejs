@@ -1,11 +1,175 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel='stylesheet' href='/css/chosen.css'/>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/fftimelines.css">
+
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+    <title>FFTimelines</title>
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container-fluid" id="search-options">
+
+    <div class="row">
+
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control" placeholder="Keyword" id="search-keyword">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+                    <select name="content" id="search-content">
+                        <option value=0>All Content (全てのコンテンツ)</option>
+
+                        <%
+                        var contentTypeModels = global.ContentTypeCollection.getAllModelsWithIdOrder();
+                        __.each(contentTypeModels, function(contentTypeModel) {
+                            var contentModels = global.ContentCollection.getModelsByType(contentTypeModel.getId());
+                        %>
+
+                        <!-- TODO 多言語対応 -->
+                        <optgroup label="<%= contentTypeModel.getTitle_en() %>">
+                            <% __.each(contentModels, function(contentModel) { %>
+                            <option value=<%= contentModel.getId() %>><%= contentModel.getTitle_en() + ' (' + contentModel.getTitle_ja() + ')' %></option>
+                            <% }); %>
+                            <% }); %>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <select name="content" id="search-order">
+                        <optgroup label="Sort by">
+                            <option value='most_recent'>Most recent</option>
+                            <option value='oldest'>Oldest</option>
+                            <option value='views'>Views</option>
+                            <option value='less_views'>Less views</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2 div-search-button">
+            <button type="button" class="btn btn-outline-primary right-angle-button" id="search-button">Search</button>
+        </div>
+        <div class="col-sm-1 div-new-button">
+            <button type="button" class="btn btn-outline-info right-angle-button" id="new-button">New</button>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="timeline_list">
+    <table class="table table-hover">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-3" scope="col">for</th>
+            <th class="col-5" scope="col">Title</th>
+            <th class="col-2" scope="col">Made by</th>
+            <th class="col-1" scope="col">Views</th>
+            <th class="col-1" scope="col">Update</th>
+        </tr>
+        </thead>
+        <tbody id="timeline_list_tbody"></tbody>
+    </table>
+</div>
+
+<!-- Create new timeline modal -->
+<div class="modal fade" id="new-timeline-modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog create-new-timeline-modal" role="document">
+        <div class="modal-content my-modal-content">
+            <div class="modal-header my-modal-header">
+                <h5 class="modal-title">Create new Timeline</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body my-modal-body">
+
+                <form>
+                    <fieldset>
+                        <div class="form-group my-form-group">
+                            <span class="my-modal-main-text">Content</span>
+                            <select name="content" id="new-timeline-select-content">
+                                <%
+                                var contentTypeModels = global.ContentTypeCollection.getAllModelsWithIdOrder();
+                                __.each(contentTypeModels, function(contentTypeModel) {
+                                    var contentModels = global.ContentCollection.getModelsByType(contentTypeModel.getId());
+                                %>
+                                <!-- TODO 多言語対応 -->
+                                <optgroup label="<%= contentTypeModel.getTitle_en() %>">
+                                    <% __.each(contentModels, function(contentModel) { %>
+                                    <option value=<%= contentModel.getId() %>><%= contentModel.getTitle_en() + ' (' + contentModel.getTitle_ja() + ')' %></option>
+                                    <% }); %>
+                                    <% }); %>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group my-form-group">
+                            <span class="my-modal-main-text">Title</span>
+                            <input type="text" class="form-control" id="new-timeline-title-input"
+                                   placeholder="Enter title">
+                            <div class="invalid-feedback">Title must be longer than 3 characters</div>
+                            <!--<small id="emailHelpaa" class="form-text my-modal-sub-text">Search your character from <a-->
+                            <!--href="https://eu.finalfantasyxiv.com/lodestone/character/"-->
+                            <!--target="_blank">HERE</a> to get your Loadstone URL.-->
+                            <!--</small>-->
+                            <!--<small id="emailHelp" class="form-text my-modal-sub-text">e.g. <a-->
+                            <!--href="https://eu.finalfantasyxiv.com/lodestone/character/18968752/"-->
+                            <!--target="_blank">https://eu.finalfantasyxiv.com/lodestone/character/18968752/</a>-->
+                            <!--</small>-->
+                        </div>
+                        <div class="form-group my-form-group">
+                            <span class="my-modal-main-text">Youtube Video ID</span>
+                            <input type="text" class="form-control" id="new-timeline-youtube-video-id-input"
+                                   placeholder="Youtube Video ID">
+                            <div class="invalid-feedback">The video is not found</div>
+                            <small id="emailHelp" class="form-text my-modal-sub-text">e.g. <a
+                                        href="https://www.youtube.com/watch?v=h542YbZuwkQ"
+                                        target="_blank">https://www.youtube.com/watch?v=h542YbZuwkQ</a>
+                                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=> Youtube Video ID: <strong>h542YbZuwkQ</strong>
+                            </small>
+                        </div>
+
+                        <div class="form-group my-form-group">
+                            <span class="my-modal-main-text">Admin password</span>
+                            <input type="password" class="form-control" id="new-timeline-admin-password-input"
+                                   placeholder="Enter Password">
+                            <div class="invalid-feedback">Admin password must be longer than 5 characters.</div>
+                            <small id="emailHelp" class="form-text my-modal-sub-text">
+                                By sharing the admin password with your friends, they can also edit the timeline.
+                            </small>
+                        </div>
+
+                    </fieldset>
+                    <div class="modal-footer my-modal-footer">
+                        <button type="button" id="new-timeline-create-button" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- need to login to create new timeline alert -->
+<div class="my-alert-bottom alert alert-danger fade show" id="need-login-alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    To create new timeline, you must login.
+</div>
+
+</body>
 </html>
+
+<script src="/js/timeline_manager/compressed/header.min.js" type="text/javascript"></script>
+<script src="/js/timeline_manager/compressed/fftimelines.min.js"></script>

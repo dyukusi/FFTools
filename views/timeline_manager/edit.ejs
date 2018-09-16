@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title glot-model="page-title">Title</title>
+    <title glot-model="page-title">FFTimelines: <%= timelineModel.getTitle() %></title>
     <meta name="description" content="TODO ここで書いたことがGoogleの検索結果に表示されるなど、多くの検索エンジンで利用されているので、超慎重に書くべき。">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -12,90 +12,413 @@
     <link rel="apple-touch-icon" href="icon.png">
     <!-- Place favicon.ico in the root directory. このサイトをスマホのデスクトップに配置したときのアイコン画像の設定 -->
 
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="css/handsontable.full.min.css"/>
+    <link rel="stylesheet" href="/css/handsontable.full.min.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/edit.css">
 </head>
 
-
 <body>
+<div id="header"></div>
+
 <div id="top" class="split">
     <div id="left" class="split content split-horizontal">
         <div class="fixing-box" id="movieArea"></div>
     </div>
 
     <div id="right" class="split content split-horizontal">
-        <%
-        var jobGroups = [
-            {design: "tank", jobs: ["TANK", "PLD", "WAR", "DRK"],},
-            {design: "healer", jobs: ["HEALER", "WHM", "SCH", "AST"],},
-            {
-                design: "dps",
-                jobs: ["MELEE", "PHYSICAL_RANGED", "MAGICAL_RANGED", "MNK", "DRG", "NIN", "SAM", "BRD", "MCH", "BLM", "SMN", "RDM"],
-            },
-        ];
 
-        _.each(jobGroups, function(group) {
-        %>
-        <div class="card <%= group.design %>">
-            <%
-            _.each(group.jobs, function(job) {
-                var data = Const.FFXIV.JOBS[job];
-                var name = data.NAME;
-                var skillImages = data.SKILL_IMAGES;
-                var jobIconPath = data.ICON ? "img/job/" + job + "/" + data.ICON : null;
-                var skillImageDirectoryPath = "img/job/" + job + "/skills/";
-            %>
-            <div class="card-body">
-                <div class="job-title">
-                    <% if (jobIconPath) { %>
-                    <img class="draggable display_tooltip" src="<%= jobIconPath %>" title="<%= name %>">
-                    <% } %>
-                    <%= name %>
+        <nav id="edit-navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="Navbar">
+                <ul class="nav nav-pills flex-column flex-lg-row">
+                    <li class="nav-item"><a class="nav-link active" href="#timeline-info"><img
+                                    src="/img/role/COMMON/icons/playguide.png" class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-tank"><img src="/img/role/TANK/icon.png"
+                                                                                    class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-healer"><img src="/img/role/HEALER/icon.png"
+                                                                                      class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-melee"><img src="/img/role/MELEE/icon.png"
+                                                                                     class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-physical-ranged"><img
+                                    src="/img/role/PHYSICAL_RANGED/icon.png" class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-magical-ranged"><img
+                                    src="/img/role/MAGICAL_RANGED/icon.png" class="material-tab-img"></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#role-common"><img src="/img/role/COMMON/icon.png"
+                                                                                      class="material-tab-img"></a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="edit-materials" class="container" data-spy="scroll" data-target="#Navbar"
+             style="height:100%; overflow: auto; position: relative;">
+
+            <div class="card card-timeline-info  container-fluid" id="timeline-info">
+                <div class="card-body">
+                    <div class="row" id="tweet-button">
+                        <div class="col-12 clearfix">
+                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 clearfix">
+                            <button id='open-submit-modal-button' type="button"
+                                    class="btn btn-outline-primary right-angle-button sub-menu-button">Submit
+                            </button>
+                        </div>
+                        <div class="col-4 clearfix">
+                            <button type="button" class="btn btn-outline-warning right-angle-button sub-menu-button"
+                                    id="open-report-modal-button">Report
+                            </button>
+                        </div>
+                        <div class="col-4 clearfix">
+                            <button type="button" class="btn btn-outline-danger right-angle-button sub-menu-button"
+                                    id="open-delete-timeline-modal-button">Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 clearfix">
+                            <div class="timeline-title">
+                                <%= timelineModel.getTitle() %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 clearfix d-flex align-items-center">
+                            <div class="mx-auto">
+                                <span>made by</span>
+                            </div>
+                        </div>
+
+                        <div class="col-9 clearfix">
+                            <div class="creator-char-img">
+                                <a target="_blank" href="https://na.finalfantasyxiv.com/lodestone/character/<%= creatorUserModel.getId() %>">
+                                <span class="made-by-char-name"><%= creatorUserModel.getName() %></span>
+                                <img src="<%= creatorUserModel.getCharacterThumbnailUrl() %>">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 clearfix d-flex align-items-center">
+                            <div class="mx-auto">
+                                <span>Content</span>
+                            </div>
+                        </div>
+
+                        <div class="col-9 clearfix">
+                            <div>
+                                <%
+                                var contentModel = ContentCollection.getModelById(timelineModel.getContentId());
+                                var contentTypeModel = ContentTypeCollection.getModelById(contentModel.getTypeId());
+                                %>
+                                <img class="sub-info-content-img" src="<%= contentTypeModel.getIconPath() %>">
+                                <span class="timeline-info-text">
+                                    <%= contentModel.getTitle_en() %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 clearfix d-flex align-items-center">
+                            <div class="mx-auto">
+                                <span>Views</span>
+                            </div>
+                        </div>
+
+                        <div class="col-9 clearfix">
+                            <div>
+                                <span class="timeline-info-text"><%= timelineModel.getViews() %></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-3 clearfix d-flex align-items-center">
+                            <div class="mx-auto">
+                                <span>Created</span>
+                            </div>
+                        </div>
+
+                        <div class="col-9 clearfix">
+                            <div>
+                                <span class="timeline-info-text"><%= new Date(timelineModel.getCreatedAt()).toLocaleString() %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 clearfix d-flex align-items-center">
+                            <div class="mx-auto">
+                                <span>Last Updated</span>
+                            </div>
+                        </div>
+
+                        <div class="col-9 clearfix">
+                            <div>
+                                <span class="timeline-info-text"><%= new Date(timelineModel.getUpdatedAt()).toLocaleString() %></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
-                <br class="clear">
-                <div>
+
+
+            </div>
+
+            <%
+            var dispOrder = [
+                {
+                    designClassName: "role-tank",
+                    roleId: MyConst.ROLE_NAME_TO_ID.TANK,
+                },
+                {
+                    designClassName: "role-healer",
+                    roleId: MyConst.ROLE_NAME_TO_ID.HEALER,
+                },
+                {
+                    designClassName: "role-melee",
+                    roleId: MyConst.ROLE_NAME_TO_ID.MELEE,
+                },
+                {
+                    designClassName: "role-physical-ranged",
+                    roleId: MyConst.ROLE_NAME_TO_ID.PHYSICAL_RANGED,
+                },
+                {
+                    designClassName: "role-magical-ranged",
+                    roleId: MyConst.ROLE_NAME_TO_ID.MAGICAL_RANGED,
+                },
+                {
+                    designClassName: "role-common",
+                    roleId: MyConst.ROLE_NAME_TO_ID.COMMON,
+                }
+            ];
+
+            __.each(dispOrder, function(group) {
+                var roleModel = RoleCollection.getModelById(group.roleId);
+                var roleSkillModels = SkillCollection.getModelsByOnlyRoleId(roleModel.getId());
+            %>
+            <div class="card <%= group.designClassName %>" id="<%= group.designClassName %>">
+                <div class="card-body">
+
+                    <!-- role -->
+                    <div class="job-title">
+                        <img class="my-draggable display_tooltip" src="<%= roleModel.getIconPath() %>"
+                             title="<%= roleModel.getName_en() %>">
+                        <%= roleModel.getName_en() %>
+                    </div>
+                    <br class="clear">
+                    <div>
+                        <% __.each(roleSkillModels, function(skillModel) { %>
+                        <img class="my-draggable draggable-skill display_tooltip"
+                             src="<%= skillModel.getIconPath() %>"
+                             title="<%= skillModel.getName_en() %>">
+                        <% }); %>
+                    </div>
+
+                    <!-- job -->
                     <%
-                    _.each(skillImages, function(image) {
-                        var skillPath = skillImageDirectoryPath + image;
-                        var toolTipTitle = LANG[image][0];
+                    __.each(JobCollection.getModelsByRoleId(group.roleId), function(jobModel) {
+                        var jobSkillModels = SkillCollection.getModelsByJobId(jobModel.getId());
                     %>
-                    <img class="draggable draggable-skill display_tooltip" src="<%= skillPath %>"
-                         title="<%= toolTipTitle %>">
+
+                    <div class="job-title">
+                        <img class="my-draggable display_tooltip" src="<%= jobModel.getIconPath() %>"
+                             title="<%= jobModel.getName_en() %>">
+                        <%= jobModel.getName_en() %>
+                    </div>
+                    <br class="clear">
+                    <div>
+                        <% __.each(jobSkillModels, function(jobSkillModel) { %>
+                        <img class="my-draggable draggable-skill display_tooltip"
+                             src="<%= jobSkillModel.getIconPath() %>"
+                             title="<%= jobSkillModel.getName_en() %>">
+                        <% }); %>
+                    </div>
+
                     <% }); %>
                 </div>
             </div>
-
             <% }); %>
+
         </div>
-        <% }); %>
 
     </div>
 </div>
 
 <div id="bottom" class="split content">
-    <div id="handsontable" class="split content"></div>
+    <!--<div id="hogehoge" class="split content"></div>-->
+    <!--TEST<br><br><br><br><br><br><br>TEST-->
+    <div id="handsontable" class="split content" style="width:100%; height: 100%;"></div>
+    <!--<div id="handsontable" class="split content"></div>-->
+</div>
+
+<!-- DIALOGS -->
+<div id="col-header-rename-dialog" title="Create new user">
+    <!--<p class="validateTips">All form fields are required.</p>-->
+
+    <form id="col-header-name-form">
+        <fieldset>
+            <label for="name">New Name</label>
+            <input type="text" name="name" id="col-header-name-input" value=""
+                   class="text ui-widget-content ui-corner-all">
+
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<!-- submit modal for GUEST -->
+<div class="modal fade" id="submit-modal-for-guest" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+        <div class="modal-content my-modal-content">
+
+            <div class="modal-header my-modal-header">
+                <h5 class="modal-title">Submit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body my-modal-body">
+                You are not owner of this timeline.<br>
+                To continue, please enter admin password.
+                <form onsubmit="return false;">
+                    <fieldset>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="timeline-admin-password-input"
+                                   placeholder="Enter admin password of this timeline">
+                            <div class="invalid-feedback">Invalid Password</div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="modal-footer my-modal-footer">
+                <button type="button" class="btn btn-primary" id="submit-timeline-for-guest">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- delete timeline confirmation modal -->
+<!-- for guest -->
+<div class="modal fade" id="delete-timeline-modal-for-guest" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+        <div class="modal-content my-modal-content">
+
+            <div class="modal-header my-modal-header">
+                <h5 class="modal-title">Delete Timeline</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body my-modal-body">
+                You are not the owner of this timeline.<br>
+                We don't allow guest users to delete any timelines.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- for owner -->
+<div class="modal fade" id="delete-timeline-modal-for-owner" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+        <div class="modal-content my-modal-content">
+
+            <div class="modal-header my-modal-header">
+                <h5 class="modal-title">Delete Timeline</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body my-modal-body">
+                Are you sure to <span style="color:red;">DELETE</span> the timeline?<br>
+                You can not rollback this process.
+            </div>
+
+            <div class="modal-footer my-modal-footer">
+                <button type="button" class="btn btn-primary" id="delete-timeline-button">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- report modal -->
+<div class="modal fade" id="report-modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+        <div class="modal-content my-modal-content">
+
+            <div class="modal-header my-modal-header">
+                <h5 id="report-modal-title" class="modal-title">Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body my-modal-body">
+                Please report timelines that contain inappropriate stuff.<br>
+                Your report will contribute to make the service, "FFTimelines" much better.
+                <form>
+                    <fieldset>
+                        <div class="form-group">
+                            <label><br>Email address(Optional)</label>
+                            <input type="email" class="form-control" id="report-email-input"
+                                   placeholder="Email(Optional)">
+                            <small id="emailHelp" class="form-text my-modal-sub-text">If you need to discuss
+                                about the
+                                problem with the support team of FFTimelines, please enter your Email address.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label>Enter your report here</label>
+                            <textarea class="form-control" id="report-text-input" rows="6"></textarea>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="modal-footer my-modal-footer">
+                <button type="button" class="btn btn-primary" id="report-timeline-button">Report</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- submit success alert -->
+<div class="my-alert-bottom alert alert-success fade show" id="submit-success-alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    The timeline has been submitted successfully!
+</div>
+
+<!-- report success alert -->
+<div class="my-alert-bottom alert alert-success fade show" id="report-success-alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    Your report has been sent successfully! Thanks for the cooperation.
 </div>
 
 </body>
 
-
-<script src="js/lib/vendor/jquery.js" type="text/javascript"></script>
-<script src="js/lib/vendor/handsontable.full.min.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-
-<script src="js/plugins.js"></script>
-<script data-main="js/app" src="js/lib/vendor/require.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
+<script src="/js/timeline_manager/compressed/header.min.js" type="text/javascript"></script>
+<script src="/js/timeline_manager/lib/vendor/split-1.3.5.min.js"></script>
+<script src="/js/timeline_manager/compressed/edit.min.js" type="text/javascript"></script>
 
 </html>

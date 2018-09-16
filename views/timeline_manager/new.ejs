@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/style.css'/>
+    <link rel='stylesheet' href='/css/chosen.css'/>
+</head>
+<body>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
+<p></p>
+
+<br>
+<form action="/fftimelines/new" method="post">
+    AAタイトル<input type="text" name="title"><br>
+    youtube video ID <input type="text" name="youtube_video_id"><br>
+    編集パスワード<input type="text" name="edit_password"><br>
+    コンテンツ
+    <select name="content" id="select-content">
+        <%
+        var contentTypeModels = global.ContentTypeCollection.getAllModelsWithIdOrder();
+        __.each(contentTypeModels, function(contentTypeModel) {
+            var contentModels = global.ContentCollection.getModelsByType(contentTypeModel.getId());
+        %>
+        <!-- TODO 多言語対応 -->
+        <optgroup label="<%= contentTypeModel.getTitle_ja() %>">
+            <% __.each(contentModels, function(contentModel) { %>
+            <option value=<%= contentModel.getId() %>><%= contentModel.getTitle_ja() %></option>
+            <% }); %>
+        <% }); %>
+        </optgroup>
+    </select>
+    <br>
+    言語
+    <input type="checkbox" name="language" value="en" checked="checked">English
+    <input type="checkbox" name="language" value="ja">日本語
+    <br>
+
+    <input type="submit" value="投稿">
+</form>
+
+</body>
+
+<script src="/js/timeline_manager/compressed/new.min.js" type="text/javascript"></script>
+</html>

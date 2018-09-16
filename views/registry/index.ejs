@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <p></p>
+
+    <br>
+    <form action="/registry" method="post">
+      あなたのcharId <input type="text" name="char_id"><br>
+      パスワード<input type="text" name="password"><br>
+      e-mail<input type="text" name="e-mail"><br>
+      <input type="submit" value="投稿">
+    </form>
+
+  </body>
+</html>

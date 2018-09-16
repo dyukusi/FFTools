@@ -1,0 +1,36 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    /*background-color: #F6F6F6;*/
+    box-sizing: border-box;
+}
+
+.div-search-button {
+    padding-left: 0.5rem;
+    padding-right: 0rem;
+}
+
+.div-new-button {
+    padding-left: 0.5rem;
+    padding-right: 0px;
+}
+
+.alert{
+    display: none;
+    z-index: 999999;
+}
+
+.my-alert-bottom{
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+}
+
+.chosen-drop .chosen-results {
+    max-height: 30rem;
+}
