@@ -315,7 +315,7 @@ img.draggable-skill {
     -moz-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
     box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
 
-    -webkit-border-radius: 60em;
-    -moz-border-radius: 60em;
-    border-radius: 60em;
+    /*-webkit-border-radius: 60em;*/
+    /*-moz-border-radius: 60em;*/
+    /*border-radius: 60em;*/
 }
