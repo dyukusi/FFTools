@@ -546,71 +546,88 @@ exports.Timeline = class Timeline {
     var d = Q.defer();
     var con = db.connect(MyConst.DB.DATABASE).con;
 
-    con.beginTransaction(function (err) {
-      if (err) {
-        throw err;
-      }
+    con.query(
+      "SELECT * from timeline_view_history WHERE ip = ? AND timeline_id = ? AND DATE_ADD(created_at, INTERVAL 1 DAY) > NOW()",
+      [ip, timelineId]
+      , function (err, rows, fields) {
+        if (err) {
+          throw new Error(err);
+          return;
+        }
 
-      async.waterfall([
-        function (callback) {
-          con.query(
-            "INSERT IGNORE INTO timeline_view_history SET ?",
-            {
-              ip: ip,
-              timeline_id: timelineId,
+        if (rows && rows.length) {
+          d.resolve();
+          con.end();
+          return;
+        }
+
+        con.beginTransaction(function (err) {
+          if (err) {
+            throw err;
+          }
+
+          async.waterfall([
+            function (callback) {
+              con.query(
+                "INSERT INTO timeline_view_history SET ?",
+                {
+                  ip: ip,
+                  timeline_id: timelineId,
+                },
+                function (error, results, fields) {
+                  if (error) {
+                    callback(error);
+                    return;
+                  }
+
+                  callback(null);
+                }
+              );
             },
-            function (error, results, fields) {
-              if (error) {
-                callback({error: error,});
-              }
 
-              callback(null, results.affectedRows);
-            }
-          );
-        },
+            function (callback) {
+              con.query(
+                "UPDATE timeline SET views = views + 1 WHERE id = ?",
+                [timelineId],
+                function (error, results, fields) {
+                  if (error) {
+                    callback(error);
+                    return;
+                  }
 
-        function (affectedRows, callback) {
-          if (affectedRows) {
-            con.query(
-              "UPDATE timeline SET views = views + 1 WHERE id = ?",
-              [timelineId],
-              function (error, results, fields) {
+                  callback(null);
+                }
+              );
+            },
+
+            function (callback) {
+              con.commit(function (error) {
                 if (error) {
-                  callback({error: error,});
+                  callback(error);
+                  return;
                 }
 
                 callback(null);
-              }
-            );
-          } else {
-            callback(null);
-          }
-        },
-
-        function (callback) {
-          con.commit(function (error) {
-            if (error) {
-              callback({error: error,});
+              });
             }
 
-            callback(null);
-          });
-        }
+          ], function (err) {
+            if (err) {
+              d.reject("db problem");
+              con.rollback(function () {
+                throw new Error(err);
+              });
+            } else {
+              d.resolve();
+            }
 
-      ], function (err) {
-        if (err) {
-          d.reject("db problem");
-          con.rollback(function () {
-            throw err;
+            con.end();
           });
-        } else {
-          d.resolve();
-        }
 
-        con.end();
+
+        });
+
       });
-
-    });
 
     return d.promise;
   }
