@@ -85,7 +85,6 @@ app.use(session({
 app.use('/', indexController);
 
 app.use('/about', function (req, res) {
-  debugger;
   res.render('about', {});
 });
 
