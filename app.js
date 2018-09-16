@@ -84,10 +84,6 @@ app.use(session({
 
 app.use('/', indexController);
 
-app.use('/about', function (req, res) {
-  res.render('about', {});
-});
-
 app.use('/logout', function (req, res) {
   if (req.session) {
     req.session.destroy();
