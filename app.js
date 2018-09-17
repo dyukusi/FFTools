@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var redirectToHTTPS = require('express-http-to-https').redirectToHTTPS
 
 // global vars
 global.Config = require('config');
@@ -62,6 +63,10 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+
+// Auto HTTP => HTTPS
+// Don't redirect if the hostname is `localhost:port` or the route is `/insecure`
+app.use(redirectToHTTPS([/localhost:(\d{4})/], [/\/insecure/], 301));
 
 app.use(logger('dev'));
 app.use(express.json());
