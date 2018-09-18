@@ -4,11 +4,12 @@ var db = require(appRoot + '/my_node_libs/db.js');
 var Q = require('q');
 
 exports.Content = class Content {
-  constructor(id, typeId, title_en, title_ja) {
+  constructor(id, typeId, title_en, title_ja, iconPath) {
     this.id = id;
     this.typeId = typeId;
     this.title_en = title_en;
     this.title_ja = title_ja;
+    this.iconPath = iconPath;
   }
 
   getId() {
@@ -27,6 +28,10 @@ exports.Content = class Content {
     return this.title_ja
   }
 
+  getIconPath() {
+    return this.iconPath;
+  }
+
   // static functions
   static selectAll() {
     var d = Q.defer();
@@ -41,7 +46,8 @@ exports.Content = class Content {
             row["id"],
             row["type"],
             row["title_en"],
-            row["title_ja"]
+            row["title_ja"],
+            row["icon_path"]
           ));
         });
 

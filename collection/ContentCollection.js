@@ -25,6 +25,7 @@ exports.ContentCollection = class ContentCollection {
         type_id: model.getTypeId(),
         title_en: model.getTitle_en(),
         title_ja: model.getTitle_ja(),
+        icon_path: model.getIconPath(),
       };
     });
 

@@ -118,8 +118,9 @@
                                 <%
                                 var contentModel = ContentCollection.getModelById(timelineModel.getContentId());
                                 var contentTypeModel = ContentTypeCollection.getModelById(contentModel.getTypeId());
+                                var iconPath = contentModel.getIconPath() || contentTypeModel.getIconPath();
                                 %>
-                                <img class="sub-info-content-img" src="<%= contentTypeModel.getIconPath() %>">
+                                <img class="sub-info-content-img" src="<%= iconPath %>">
                                 <span class="timeline-info-text">
                                     <%= contentModel.getTitle_en() %>
                                 </span>
