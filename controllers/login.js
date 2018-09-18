@@ -39,7 +39,9 @@ router.post('/', function (req, res, next) {
     .then(function (user) {
       if (hashedPassword == user.getHashedPassword()) {
         req.session.user_id = user.getId();
+
         res.send({ success: true, });
+        User.updateLastLoginedAtByUserId(user.getId())
       } else {
         res.send({ success: false, });
       }

@@ -161,4 +161,26 @@ exports.User = class User {
 
     return d.promise;
   }
+
+  static updateLastLoginedAtByUserId(userId) {
+    var d = Q.defer();
+
+    var con = db.connect(MyConst.DB.DATABASE).con;
+
+    con.query(
+      "UPDATE user SET last_logined_at = CURRENT_TIMESTAMP WHERE id = ?",
+      [userId],
+      function (error, results, fields) {
+        if (error) {
+          console.log(error.stack);
+          d.reject("DB problem");
+          return;
+        }
+
+        d.resolve();
+      });
+
+    return d.promise;
+  }
+
 }
