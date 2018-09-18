@@ -43,6 +43,7 @@ $(function () {
       initOpenDeleteTimelineModalButton();
       initReportTimelineButton();
       initConfirmMovePageDialog();
+      initColHeaderRenameButton();
 
       $(function () {
         $("#tabs").tabs();
@@ -58,21 +59,21 @@ $(function () {
 });
 
 function initConfirmMovePageDialog() {
-  $(window).on('beforeunload', function(){
+  $(window).on('beforeunload', function () {
     return true;
   });
 }
 
 
 function initOpenReportModalButton() {
-  $('#open-report-modal-button').on('click', function() {
+  $('#open-report-modal-button').on('click', function () {
     $('#report-modal').modal('show');
     $('#report-modal-title').text('Report form about \'' + timelineIdHash + '\'');
   });
 }
 
 function initReportTimelineButton() {
-  $('#report-timeline-button').on('click', function() {
+  $('#report-timeline-button').on('click', function () {
     var $this = $(this);
     var email = $('#report-email-input').val();
     var text = $('#report-text-input').val();
@@ -102,11 +103,11 @@ function initReportTimelineButton() {
 
         $successAlert.show();
 
-        setTimeout(function() {
+        setTimeout(function () {
           $this.removeClass('disabled');
         }, 5000);
 
-        setTimeout(function() {
+        setTimeout(function () {
           $successAlert.fadeOut(500);
         }, 5000);
       } else {
@@ -119,10 +120,8 @@ function initReportTimelineButton() {
 }
 
 
-
-
 function initOpenDeleteTimelineModalButton() {
-  $('#open-delete-timeline-modal-button').on('click', function() {
+  $('#open-delete-timeline-modal-button').on('click', function () {
 
     request({
       url: MyUtil.getLocationOrigin() + '/fftimelines/check_owner/' + timelineIdHash,
@@ -143,7 +142,7 @@ function initOpenDeleteTimelineModalButton() {
 
 function initDeleteTimelineButton() {
 
-  $('#delete-timeline-button').on('click', function() {
+  $('#delete-timeline-button').on('click', function () {
     var $this = $(this);
     var $passwordInput = $('#timeline-admin-password-input-for-delete');
     var inputtedAdminPassword = $passwordInput.val();
@@ -175,6 +174,25 @@ function initDeleteTimelineButton() {
     });
   });
 
+}
+
+function initColHeaderRenameButton() {
+  $('#col-header-rename-confirm-button').on('click', function () {
+    console.log("ok");
+    var modal = $('#col-header-rename-modal').modal();
+
+    var newName = $('#col-header-name-input').val();
+    var newHeader = ht.getColHeader();
+    var targetColIdx = modal.data('targetColIdx');
+
+    newHeader[targetColIdx] = newName;
+
+    ht.updateSettings({
+      colHeaders: newHeader,
+    });
+
+    modal.modal('hide');
+  });
 }
 
 function initEditMaterialsPane() {
@@ -235,57 +253,24 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
       },
       items: {
         "rename-header": {
-          name: "rename",
+          name: "Rename",
           callback: (function (optionName, selected) {
             var targetColIdx = selected[0].start.col;
             var currentName = ht.getColHeader()[targetColIdx];
-            $("#col-header-name-input").val(currentName);
 
-            var colHeadeRenameDialog = $("#col-header-rename-dialog").dialog({
-              autoOpen: false,
-              // height: 400,
-              // width: 350,
-              modal: true,
-              buttons: {
-                "OK": function () {
-                  console.log("OK!!!!!!!");
-
-                  var newName = $('#col-header-name-input').val();
-                  var newHeader = ht.getColHeader();
-
-                  newHeader[colHeadeRenameDialog.targetColIdx] = newName;
-
-                  ht.updateSettings({
-                    colHeaders: newHeader,
-                  });
-
-                  $('#col-header-name-input').val("");
-
-                  colHeadeRenameDialog.dialog("close");
-                },
-                Cancel: function () {
-                  colHeadeRenameDialog.dialog("close");
-                }
-              },
-              close: function () {
-                // form[0].reset();
-                // allFields.removeClass( "ui-state-error" );
-              }
-            });
-
-            colHeadeRenameDialog.targetColIdx = targetColIdx;
-
-            colHeadeRenameDialog.dialog("open");
+            var modal = $('#col-header-rename-modal').modal();
+            modal.find('#col-header-name-input').val(currentName);
+            modal.data('targetColIdx', targetColIdx);
+            modal.modal('show');
           }),
         },
         // TODO 現状は末尾追加しかできないので、途中追加できるようにする
         "add-column": {
-          name: "add new column",
+          name: "Add new column",
           callback: (function () {
             var colHeaders = ht.getColHeader();
             colHeaders.push("New Column");
             var columns = generateColumnsSettingArray(ht.defaultCellSetting, colHeaders.length);
-            //
 
             ht.updateSettings({
               colHeaders: colHeaders,
@@ -294,7 +279,7 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
           }),
         },
         "remove-column": {
-          name: "remove column",
+          name: "Remove column",
           callback: function (optionName, selected) {
             var colHeaders = ht.getColHeader();
             var targetColIdx = selected[0].start.col;
@@ -615,12 +600,12 @@ function submitTimeline(button) {
       $('#submit-modal-for-guest').modal('hide');
       $this.html($this.data('original-text'));
 
-      setTimeout(function() {
+      setTimeout(function () {
         $this.removeClass('disabled');
       }, 5000);
 
       $successAlert.show();
-      setTimeout(function() {
+      setTimeout(function () {
         $successAlert.fadeOut(500);
       }, 5000);
     } else {

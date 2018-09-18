@@ -265,20 +265,40 @@
 </div>
 
 <!-- DIALOGS -->
-<div id="col-header-rename-dialog" title="Create new user">
-    <!--<p class="validateTips">All form fields are required.</p>-->
+<div class="modal fade" id="col-header-rename-modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered my-modal-dialog" role="document">
+        <div class="modal-content my-modal-content">
 
-    <form id="col-header-name-form">
-        <fieldset>
-            <label for="name">New Name</label>
-            <input type="text" name="name" id="col-header-name-input" value=""
-                   class="text ui-widget-content ui-corner-all">
+            <div class="modal-header my-modal-header">
+                <h5 class="modal-title">Rename</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-            <!-- Allow form submission with keyboard without duplicating the dialog button -->
-            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-        </fieldset>
-    </form>
+            <div class="modal-body my-modal-body">
+                Please Enter new header name<br>
+                <form onsubmit="return false;">
+                    <fieldset>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="col-header-name-input" value=""
+                                   placeholder="new header name">
+                            <div class="invalid-feedback">Invalid Name</div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="modal-footer my-modal-footer">
+                <button type="button" class="btn btn-primary" id="col-header-rename-confirm-button">OK</button>
+            </div>
+
+        </div>
+    </div>
 </div>
+
+
+
 
 <!-- submit modal for GUEST -->
 <div class="modal fade" id="submit-modal-for-guest" data-backdrop="static" data-keyboard="false">
