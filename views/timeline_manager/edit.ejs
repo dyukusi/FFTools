@@ -165,7 +165,11 @@
 
                         <div class="col-9 clearfix">
                             <div>
-                                <span class="timeline-info-text"><%= new Date(timelineModel.getUpdatedAt()).toLocaleString() %></span>
+                                <%
+                                  var updatedAt = timelineModel.getUpdatedAt();
+                                  var updatedAtText = updatedAt ? new Date(timelineModel.getUpdatedAt()).toLocaleString() : '';
+                                %>
+                                <span class="timeline-info-text"><%= updatedAtText %></span>
                             </div>
                         </div>
                     </div>
