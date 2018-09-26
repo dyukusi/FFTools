@@ -35,7 +35,7 @@
 /*}*/
 
 /*#bottom {*/
-    /*overflow: hidden;*/
+/*overflow: hidden;*/
 /*}*/
 
 /* Row headers */
@@ -49,10 +49,10 @@
 /*}*/
 
 /*#handsontable td, #handsontable tr, #handsontable th {*/
-    /*border:  1px solid blue;*/
+/*border:  1px solid blue;*/
 /*}*/
 
-#handsontable tr:first-child td, #handsontable tr:first-child th, #handsontable tr{
+#handsontable tr:first-child td, #handsontable tr:first-child th, #handsontable tr {
     border-top: 1px solid black;
 }
 
@@ -66,8 +66,8 @@
 }
 
 /*.handsontable tr {*/
-    /*border-top:1px solid black !important;*/
-    /*border-bottom:1px solid black !important;*/
+/*border-top:1px solid black !important;*/
+/*border-bottom:1px solid black !important;*/
 /*}*/
 
 #handsontable .htNoFrame + td, #handsontable .htNoFrame + th, #handsontable.htRowHeaders thead tr th:nth-child(2), #handsontable td:first-of-type, #handsontable th:first-child, #handsontable th:nth-child(2) {
@@ -100,7 +100,6 @@
     background-color: black !important;
     color: #ccc9cc;
 }
-
 
 .ht_master tr td {
     /* cell background color */
@@ -201,6 +200,11 @@ img.draggable-skill {
     margin: 5px;
 }
 
+.options {
+    background-color: black;
+    margin: 5px;
+}
+
 .card-timeline-info {
     /*border: 1px solid #4242ce;*/
     background-color: black;
@@ -213,7 +217,7 @@ img.draggable-skill {
 }
 
 .job-title {
-    text-shadow:2px 2px 4px #000000;
+    text-shadow: 2px 2px 4px #000000;
     color: white;
     font-weight: bold;
     font-size: 200%;
@@ -238,14 +242,14 @@ img.draggable-skill {
     padding: 0.1rem;
 }
 
-.my-alert-bottom{
+.my-alert-bottom {
     position: fixed;
     bottom: 5px;
-    left:2%;
+    left: 2%;
     width: 96%;
 }
 
-.alert{
+.alert {
     display: none;
     z-index: 999999;
 }
@@ -270,11 +274,11 @@ img.draggable-skill {
 .made-by-char-name {
     font-weight: bold;
     color: white;
-    text-shadow:2px 2px 4px #747474;
+    text-shadow: 2px 2px 4px #747474;
 }
 
 .timeline-title {
-    text-shadow:2px 2px 4px #808080;
+    text-shadow: 2px 2px 4px #808080;
     color: white;
     font-weight: bold;
     font-size: 200%;
@@ -311,11 +315,26 @@ img.draggable-skill {
 }
 
 .my-draggable:hover {
-    -webkit-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
-    -moz-box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
-    box-shadow: 0 0 20px rgba(255,255,255,.6), inset 0 0 20px rgba(255,255,255,1);
+    -webkit-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+    -moz-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
 
     /*-webkit-border-radius: 60em;*/
     /*-moz-border-radius: 60em;*/
     /*border-radius: 60em;*/
+}
+
+.options-title {
+    text-shadow: 2px 2px 4px #000000;
+    color: white;
+    font-weight: bold;
+    /*font-size: 200%;*/
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.option-enabled {
+    color: #fff;
+    background-color: #822bad;
+    border-color: #7a29a3
 }

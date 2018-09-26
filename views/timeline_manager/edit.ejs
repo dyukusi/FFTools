@@ -54,30 +54,13 @@
         <div id="edit-materials" class="container" data-spy="scroll" data-target="#Navbar"
              style="height:100%; overflow: auto; position: relative;">
 
-            <div class="card card-timeline-info  container-fluid" id="timeline-info">
+            <div class="card card-timeline-info container-fluid" id="timeline-info">
                 <div class="card-body">
                     <div class="row" id="tweet-button">
                         <div class="col-12 clearfix">
-                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-4 clearfix">
-                            <button id='open-submit-modal-button' type="button"
-                                    class="btn btn-outline-primary right-angle-button sub-menu-button">Submit
-                            </button>
-                        </div>
-                        <div class="col-4 clearfix">
-                            <button type="button" class="btn btn-outline-warning right-angle-button sub-menu-button"
-                                    id="open-report-modal-button">Report
-                            </button>
-                        </div>
-                        <div class="col-4 clearfix">
-                            <button type="button" class="btn btn-outline-danger right-angle-button sub-menu-button"
-                                    id="open-delete-timeline-modal-button">Delete
-                            </button>
+                            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
+                               data-show-count="false">Tweet</a>
+                            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                         </div>
                     </div>
 
@@ -98,9 +81,10 @@
 
                         <div class="col-9 clearfix">
                             <div class="creator-char-img">
-                                <a target="_blank" href="https://na.finalfantasyxiv.com/lodestone/character/<%= creatorUserModel.getId() %>">
-                                <span class="made-by-char-name"><%= creatorUserModel.getName() %></span>
-                                <img src="<%= creatorUserModel.getCharacterThumbnailUrl() %>">
+                                <a target="_blank"
+                                   href="https://na.finalfantasyxiv.com/lodestone/character/<%= creatorUserModel.getId() %>">
+                                    <span class="made-by-char-name"><%= creatorUserModel.getName() %></span>
+                                    <img src="<%= creatorUserModel.getCharacterThumbnailUrl() %>">
                                 </a>
                             </div>
                         </div>
@@ -167,10 +151,72 @@
                         <div class="col-9 clearfix">
                             <div>
                                 <%
-                                  var updatedAt = timelineModel.getUpdatedAt();
-                                  var updatedAtText = updatedAt ? new Date(timelineModel.getUpdatedAt()).toLocaleString() : '';
+                                var updatedAt = timelineModel.getUpdatedAt();
+                                var updatedAtText = updatedAt ? new Date(timelineModel.getUpdatedAt()).toLocaleString() : '';
                                 %>
                                 <span class="timeline-info-text"><%= updatedAtText %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card options" id="timeline-options">
+                <div class="card-body container-fluid">
+
+                    <div class="row">
+                        <div class="col-12 clearfix">
+                            <div class="options-title">
+                                Main commands
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 clearfix">
+                            <button id='open-submit-modal-button' type="button"
+                                    class="btn btn-outline-primary right-angle-button sub-menu-button">Submit
+                            </button>
+                        </div>
+                        <div class="col-4 clearfix">
+                            <button type="button" class="btn btn-outline-warning right-angle-button sub-menu-button"
+                                    id="open-report-modal-button">Report
+                            </button>
+                        </div>
+                        <div class="col-4 clearfix">
+                            <button type="button" class="btn btn-outline-danger right-angle-button sub-menu-button"
+                                    id="open-delete-timeline-modal-button">Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card options" id="timeline-options">
+                <div class="card-body container-fluid">
+
+                    <div class="row">
+                        <div class="col-12 clearfix">
+                            <div class="options-title">
+                                Options
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-3 d-flex align-items-center">
+                            <div class="mx-auto">
+                                <button id='hide-empty-row-button' type="button"
+                                        class="btn btn-outline-info right-angle-button sub-menu-button">
+                                    Hide empty row
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-3 d-flex align-items-center">
+                            <div class="mx-auto">
                             </div>
                         </div>
                     </div>
@@ -297,8 +343,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <!-- submit modal for GUEST -->

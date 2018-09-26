@@ -14,6 +14,9 @@ var player;
 var state;
 var htElement = document.getElementById("handsontable");
 
+var scrollRowArray = [];
+var rowToSecArray = [];
+
 // main process
 $(function () {
   var options = {
@@ -44,12 +47,15 @@ $(function () {
       initReportTimelineButton();
       initConfirmMovePageDialog();
       initColHeaderRenameButton();
+      initHideEmptyRowButtoon();
 
       $(function () {
         $("#tabs").tabs();
       });
     }).done(function () {
       initToolTip();
+      initOptions(data["option_ids"]);
+
       console.log("initialization completed");
     }).fail(function () {
       console.log("initialization failed");
@@ -58,12 +64,80 @@ $(function () {
 
 });
 
+function initOptions(enabledOptionIds) {
+  console.log(enabledOptionIds);
+
+  // hide empty row
+  ToggleHideEmptyRow(__.contains(enabledOptionIds, 1));
+}
+
+function ToggleHideEmptyRow(forceBool) {
+  var $button = $('#hide-empty-row-button');
+  rowToSecArray = [];
+  scrollRowArray = [];
+
+  var isEnabled = !__.isUndefined(forceBool) ? !forceBool : $button.hasClass('option-enabled');
+
+  // => DISABLE
+  if (isEnabled) {
+    for (var i = 0; i <= ht.getSourceData().length; i++) {
+      scrollRowArray.push(i);
+      rowToSecArray.push(i);
+    }
+
+    // NOTE : ht.removeHook doesn't work
+    ht.pluginHookBucket.modifyRow = [];
+    $button.removeClass('option-enabled');
+  }
+
+  // => ENABLE
+  else {
+    var rowHasDataIdxArray = [];
+    var scrollRowIdx = -1;
+    for (var i = 0; i <= ht.getSourceData().length; i++) {
+      var row = ht.getSourceDataAtRow(i);
+
+      if (__.any(row)) {
+        scrollRowIdx++;
+        rowHasDataIdxArray.push(i);
+        rowToSecArray.push(i);
+      }
+
+      scrollRowArray.push(scrollRowIdx);
+    }
+
+    ht.addHook('modifyRow', function (row) {
+      var next = rowHasDataIdxArray[row];
+
+      if (__.isUndefined(next)) {
+        return null;
+      }
+
+      return next;
+    });
+    $button.addClass('option-enabled');
+  }
+
+  ht.updateSettings({
+    rowHeaders: __.map(rowToSecArray, function (sec) {
+      return MyUtil.convertIntToMinSecStr(sec);
+    }),
+  });
+
+  ht.render();
+}
+
+function initHideEmptyRowButtoon() {
+  $('#hide-empty-row-button').on('click', function () {
+    ToggleHideEmptyRow();
+  });
+}
+
 function initConfirmMovePageDialog() {
   $(window).on('beforeunload', function () {
     return true;
   });
 }
-
 
 function initOpenReportModalButton() {
   $('#open-report-modal-button').on('click', function () {
@@ -241,7 +315,6 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
     // manualColumnMove: true,
     manualRowResize: true,
     // stretchH: 'all',
-
     allowInsertColumn: true,
     allowInsertRow: true,
 
@@ -306,8 +379,8 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
       }
     },
 
-    afterSelection: function (columnPos, rowPos) {
-      var videoTimeMoveTo = columnPos; // NOTE: column index = time
+    afterSelection: function (rowPos, columnPos) {
+      var videoTimeMoveTo = rowToSecArray[rowPos];
       player.seekTo(videoTimeMoveTo);
     },
 
@@ -428,12 +501,16 @@ function initYoutubeVideo(videoId) {
               var currentVideoTime = parseInt(player.getCurrentTime());
 
               if (previous != currentVideoTime) {
+                previous = currentVideoTime;
+                var targetRowIdx = scrollRowArray[currentVideoTime];
+                var previousRow = $(ht.getCell(targetRowIdx - 1, 0));
+
                 // 再生中の時間のセルの背景色を変える
                 ht.updateSettings({
                   renderAllRows: true,
                   cells: function (row, col, prop) {
-                    if (row == currentVideoTime) {
-                      var cell = ht.getCell(row, col);
+                    if (scrollRowArray[row] == targetRowIdx) {
+                      var cell = ht.getCell(targetRowIdx, col);
                       if (cell && cell.style) {
                         // background
                         $(cell).css("backgroundColor", "black");
@@ -443,25 +520,24 @@ function initYoutubeVideo(videoId) {
                         $(cell).css("border-bottom", "1px solid red");
                         if (col == 0) $(cell).css("border-left", "1px solid red");
                         if (col == ht.countCols() - 1) $(cell).css("border-right", "1px solid red");
-
                       }
                     }
                   },
                 });
 
-                var currentRowHeader = $(rowHeaders[currentVideoTime + 1]);
-                currentRowHeader.addClass('current-row-header');
+                ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
+                $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
 
-                previous = currentVideoTime;
-
+                // var currentRowHeader = $(rowHeaders[currentVideoTime + 1]);
+                // currentRowHeader.addClass('current-row-header');
                 // scroll position adjustment
-                var targetCell = $(ht.getCell(currentVideoTime, 0));
-                var previousCell = $(ht.getCell(currentVideoTime - 1, 0));
-                var headerCells = $('#handsontable thead th');
-
-                var scrollTo = targetCell.position().top - previousCell.outerHeight() - headerCells.outerHeight();
-
-                $('#handsontable .wtHolder').scrollTop(scrollTo);
+                // var targetCell = $(ht.getCell(currentVideoTime, 0));
+                // var previousCell = $(ht.getCell(currentVideoTime - 1, 0));
+                // var headerCells = $('#handsontable thead th');
+                //
+                // var scrollTo = targetCell.position().top - previousCell.outerHeight() - headerCells.outerHeight();
+                //
+                // $('#handsontable .wtHolder').scrollTop(scrollTo);
               }
             }
 
@@ -584,6 +660,11 @@ function submitTimeline(button) {
     return result;
   }());
 
+  var timelineOption = [];
+  if ($('#hide-empty-row-button').hasClass('option-enabled')) {
+    timelineOption.push(1);
+  }
+
   request({
     url: MyUtil.getLocationOrigin() + '/fftimelines/edit/' + timelineIdHash,
     method: 'POST',
@@ -591,8 +672,9 @@ function submitTimeline(button) {
     json: {
       col_header: ht.getColHeader(),
       col_width_percentages: colWidthPercentages,
-      timeline: ht.getData(),
+      timeline: ht.getSourceData(),
       tl_admin_password: password,
+      timeline_option: timelineOption,
     },
   }, function (error, response, body) {
     if (body["success"]) {

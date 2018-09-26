@@ -386,7 +386,7 @@ exports.Timeline = class Timeline {
     return d.promise;
   }
 
-  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages) {
+  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages, timelineOption) {
     var d = Q.defer();
     var con = db.connect(MyConst.DB.DATABASE).con;
 
@@ -431,6 +431,20 @@ exports.Timeline = class Timeline {
         function (arg, callback) {
           con.query(
             "DELETE FROM timeline_header WHERE timeline_id = ?",
+            [arg["id"]],
+            function (error, results, fields) {
+              if (error) {
+                callback({error: error,});
+              }
+
+              callback(null, arg);
+            });
+        },
+
+        // DELETE TimelineOption
+        function (arg, callback) {
+          con.query(
+            "DELETE FROM timeline_option WHERE timeline_id = ?",
             [arg["id"]],
             function (error, results, fields) {
               if (error) {
@@ -497,6 +511,34 @@ exports.Timeline = class Timeline {
               callback(null, arg);
             }
           );
+        },
+
+        // Insert TimelineOption
+        function (arg, callback) {
+          var insertData = [];
+          __.each(timelineOption, function (optionId) {
+            insertData.push([
+              arg["id"],
+              optionId
+            ]);
+          });
+
+          if (!insertData.length) {
+            callback(null, arg);
+          } else {
+            con.query(
+              "INSERT INTO timeline_option VALUES ?",
+              [insertData],
+              function (error, results, fields) {
+                if (error) {
+                  callback({error: error,});
+                  return;
+                }
+
+                callback(null, arg);
+              }
+            );
+          }
         },
 
         // UPDATE timeline's updated_at

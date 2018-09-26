@@ -8,6 +8,7 @@ var Timeline = require(appRoot + '/models/Timeline.js').Timeline;
 var Report = require(appRoot + '/models/Report.js').Report;
 var TimelineHeader = require(appRoot + '/models/TimelineHeader.js').TimelineHeader;
 var TimelineEvent = require(appRoot + '/models/TimelineEvent.js').TimelineEvent;
+var TimelineOption = require(appRoot + '/models/TimelineOption.js').TimelineOption;
 var TimelineViewHistory = require(appRoot + '/models/TimelineViewHistory.js').TimelineViewHistory;
 var crypt = require(appRoot + '/my_node_libs/crypt.js');
 var validator = require('validator');
@@ -256,7 +257,7 @@ router.post('/edit/:timeline_id_hash', function (req, res, next) {
         (timelineAdminPassword && timelineModel.getPassword() == crypt.hashed(timelineAdminPassword))
         || (isLogin && userId == timelineModel.getUserId())
       ) {
-        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"])
+        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"], json["timeline_option"])
           .then(function (result) {
             resJson.success = true;
           })
@@ -300,10 +301,12 @@ router.get('/get/:timeline_id_hash', function (req, res, next) {
       Q.allSettled([
         TimelineHeader.selectByTimelineId(tModel.getId()),
         TimelineEvent.selectByTimelineId(tModel.getId()),
+        TimelineOption.selectByTimelineId(tModel.getId()),
       ])
         .then(function (results) {
           var headerModels = results[0].value;
           var eventModels = results[1].value;
+          var optionModels = results[2].value;
 
           var contentModel = ContentCollection.getModelById(tModel.getContentId());
 
@@ -325,14 +328,19 @@ router.get('/get/:timeline_id_hash', function (req, res, next) {
             tArray[m.getRow()][m.getColumn()] = m.getText();
           });
 
-          callback(null, tModel, contentModel, headers, tArray);
+          // option ids
+          var optionIds = __.map(optionModels, function(m) {
+            return m.getOptionId();
+          });
+
+          callback(null, tModel, contentModel, headers, tArray, optionIds);
         })
         .fail(function (err) {
           callback(err);
         });
     }
 
-  ], function (error, tModel, contentModel, headers, tArray) {
+  ], function (error, tModel, contentModel, headers, tArray, optionIds) {
     if (!error) {
       res.send({
         title: tModel.getTitle(),
@@ -345,6 +353,7 @@ router.get('/get/:timeline_id_hash', function (req, res, next) {
         created_at: tModel.getCreatedAt(),
         headers: headers,
         timeline_array: tArray,
+        option_ids: optionIds,
       });
     } else {
       res.send("failed to get timeline data. Error: " + err.stack);
