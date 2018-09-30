@@ -48,13 +48,14 @@ $(function () {
       initConfirmMovePageDialog();
       initColHeaderRenameButton();
       initHideEmptyRowButtoon();
+      initPrivateButtoon();
 
       $(function () {
         $("#tabs").tabs();
       });
     }).done(function () {
       initToolTip();
-      initOptions(data["option_ids"]);
+      initOptions(data["option_ids"], data["is_private"]);
 
       console.log("initialization completed");
     }).fail(function () {
@@ -64,12 +65,33 @@ $(function () {
 
 });
 
-function initOptions(enabledOptionIds) {
+function initOptions(enabledOptionIds, isPrivate) {
   console.log(enabledOptionIds);
 
   // hide empty row
   ToggleHideEmptyRow(__.contains(enabledOptionIds, 1));
+
+  // private
+  TogglePrivate(isPrivate);
 }
+
+function TogglePrivate(forceBool) {
+  var $button = $('#private-button');
+  var isEnabled = !__.isUndefined(forceBool) ? !forceBool : $button.hasClass('option-enabled');
+
+  // => DISABLE
+  if (isEnabled) {
+    $button.removeClass('option-enabled');
+  }
+
+  // => ENABLE
+  else {
+    $button.addClass('option-enabled');
+  }
+
+  ht.render();
+}
+
 
 function ToggleHideEmptyRow(forceBool) {
   var $button = $('#hide-empty-row-button');
@@ -130,6 +152,12 @@ function ToggleHideEmptyRow(forceBool) {
 function initHideEmptyRowButtoon() {
   $('#hide-empty-row-button').on('click', function () {
     ToggleHideEmptyRow();
+  });
+}
+
+function initPrivateButtoon() {
+  $('#private-button').on('click', function () {
+    TogglePrivate();
   });
 }
 
@@ -663,6 +691,9 @@ function submitTimeline(button) {
   var timelineOption = [];
   if ($('#hide-empty-row-button').hasClass('option-enabled')) {
     timelineOption.push(1);
+  }
+  if ($('#private-button').hasClass('option-enabled')) {
+    timelineOption.push(2);
   }
 
   request({

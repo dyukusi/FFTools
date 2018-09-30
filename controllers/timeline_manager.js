@@ -349,6 +349,7 @@ router.get('/get/:timeline_id_hash', function (req, res, next) {
         video_length: tModel.getVideoLength(),
         language: tModel.getLanguage(),
         favorite: tModel.getFavorite(),
+        is_private: tModel.getIsPrivate(),
         updated_at: tModel.getUpdatedAt(),
         created_at: tModel.getCreatedAt(),
         headers: headers,

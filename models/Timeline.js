@@ -6,7 +6,7 @@ var crc32 = require('crc32');
 var Q = require('q');
 
 exports.Timeline = class Timeline {
-  constructor(id, idHash, userId, contentId, title, password, youtubeVideoId, videoLength, language, views, favorite, isDeleted, updatedAt, createdAt) {
+  constructor(id, idHash, userId, contentId, title, password, youtubeVideoId, videoLength, language, views, favorite, isDeleted, isPrivate, updatedAt, createdAt) {
     this.id = id;
     this.idHash = idHash;
     this.userId = userId;
@@ -19,6 +19,7 @@ exports.Timeline = class Timeline {
     this.views = views;
     this.favorite = favorite;
     this.isDeleted = isDeleted;
+    this.isPrivate = isPrivate;
     this.updatedAt = updatedAt;
     this.createdAt = createdAt;
 
@@ -90,6 +91,10 @@ exports.Timeline = class Timeline {
     return this.isDeleted;
   }
 
+  getIsPrivate() {
+    return this.isPrivate;
+  }
+
   getUpdatedAt() {
     return this.updatedAt;
   }
@@ -134,6 +139,7 @@ exports.Timeline = class Timeline {
       row["views"],
       row["favorite"],
       row["is_deleted"],
+      row["is_private"],
       row["updated_at"],
       row["created_at"],
     );
@@ -180,7 +186,7 @@ exports.Timeline = class Timeline {
 
   static selectForPagenation(start, num, options) {
     var d = Q.defer();
-    var sqlBase = 'SELECT timeline.*, user.name as user_name, user.char_thumbnail_url FROM timeline JOIN user ON timeline.user_id = user.id WHERE timeline.updated_at IS NOT NULL AND timeline.is_deleted != 1 ';
+    var sqlBase = 'SELECT timeline.*, user.name as user_name, user.char_thumbnail_url FROM timeline JOIN user ON timeline.user_id = user.id WHERE timeline.updated_at IS NOT NULL AND timeline.is_deleted != 1 AND timeline.is_private != 1 ';
     var whereSQL = '';
     var orderBySQL = '';
     var phPars = [];
@@ -515,8 +521,13 @@ exports.Timeline = class Timeline {
 
         // Insert TimelineOption
         function (arg, callback) {
+          // only Private option applies to Timeline table
+          var options = __.filter(timelineOption, function(n) {
+            return n != 2;
+          });
+
           var insertData = [];
-          __.each(timelineOption, function (optionId) {
+          __.each(options, function (optionId) {
             insertData.push([
               arg["id"],
               optionId
@@ -543,9 +554,12 @@ exports.Timeline = class Timeline {
 
         // UPDATE timeline's updated_at
         function (arg, callback) {
+          // NOTE: 2: Private option id
+          var isPrivate = __.contains(timelineOption, 2) ? 1 : 0;
+
           con.query(
-            "UPDATE timeline SET updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-            [arg["id"]],
+            "UPDATE timeline SET is_private = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            [isPrivate, arg["id"]],
             function (error, results, fields) {
               if (error) {
                 callback({error: error,});
