@@ -563,7 +563,7 @@ function initYoutubeVideo(videoId) {
                 var targetCell = $(ht.getCell(targetRowIdx, 0));
                 var headerCells = $('#handsontable thead th');
 
-                var scrollTo = targetCell.position().top - previousRow.outerHeight() - headerCells.outerHeight();
+                var scrollTo = targetCell.position() ? targetCell.position().top - previousRow.outerHeight() - headerCells.outerHeight() : 0 ;
 
                 $('#handsontable .wtHolder').scrollTop(scrollTo);
               }
