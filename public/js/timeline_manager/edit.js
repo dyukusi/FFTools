@@ -553,19 +553,19 @@ function initYoutubeVideo(videoId) {
                   },
                 });
 
-                ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
-                $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
-
+                // NOTE : scrollViewportTo doesnt work on specific browser. maybe a glitch of handsontable
+                // ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
+                // $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
                 // var currentRowHeader = $(rowHeaders[currentVideoTime + 1]);
                 // currentRowHeader.addClass('current-row-header');
+
                 // scroll position adjustment
-                // var targetCell = $(ht.getCell(currentVideoTime, 0));
-                // var previousCell = $(ht.getCell(currentVideoTime - 1, 0));
-                // var headerCells = $('#handsontable thead th');
-                //
-                // var scrollTo = targetCell.position().top - previousCell.outerHeight() - headerCells.outerHeight();
-                //
-                // $('#handsontable .wtHolder').scrollTop(scrollTo);
+                var targetCell = $(ht.getCell(targetRowIdx, 0));
+                var headerCells = $('#handsontable thead th');
+
+                var scrollTo = targetCell.position().top - previousRow.outerHeight() - headerCells.outerHeight();
+
+                $('#handsontable .wtHolder').scrollTop(scrollTo);
               }
             }
 
