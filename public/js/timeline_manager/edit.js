@@ -659,9 +659,13 @@ function updateVideoCaption() {
   var currentVideoTime = parseInt(player.getCurrentTime());
   var targetRowIdx = scrollRowArray[currentVideoTime];
 
+
   var captionHTML = '';
   __.each(captionEnabledColumnIdx, function(colIdx) {
-    var html = $(ht.getCell(targetRowIdx, colIdx)).html().replace(/\n/g, '<br>');
+    var targetCell = ht.getCell(targetRowIdx, colIdx);
+    if (!targetCell) return;
+
+    var html = $(targetCell).html().replace(/\n/g, '<br>');
     captionHTML += !__.isEmpty(html) ? '<br>' + html : '';
   });
   captionHTML = captionHTML.replace('<br>', ''); // remove first unnecessary br
