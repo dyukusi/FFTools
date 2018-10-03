@@ -392,7 +392,7 @@ exports.Timeline = class Timeline {
     return d.promise;
   }
 
-  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages, timelineOption, timelineTitle) {
+  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages, timelineOption, timelineTitle, captionEnabledColIdxs) {
     var d = Q.defer();
     var con = db.connect(MyConst.DB.DATABASE).con;
 
@@ -497,12 +497,13 @@ exports.Timeline = class Timeline {
         // Insert TimelineHeader
         function (arg, callback) {
           var insertData = [];
-          __.times(colHeader.length, function (dispOrder) {
+          __.times(colHeader.length, function (colIdx) {
             insertData.push([
               arg["id"],
-              dispOrder,
-              colHeader[dispOrder],
-              colWidthPercentages[dispOrder]
+              colIdx,
+              colHeader[colIdx],
+              colWidthPercentages[colIdx],
+              __.contains(captionEnabledColIdxs, colIdx) ? 1 : 0
             ]);
           });
 

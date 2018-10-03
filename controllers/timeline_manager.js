@@ -257,7 +257,7 @@ router.post('/edit/:timeline_id_hash', function (req, res, next) {
         (timelineAdminPassword && timelineModel.getPassword() == crypt.hashed(timelineAdminPassword))
         || (isLogin && userId == timelineModel.getUserId())
       ) {
-        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"], json["timeline_option"], json["timeline_title"])
+        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"], json["timeline_option"], json["timeline_title"], json["caption_enabled_col_idx"])
           .then(function (result) {
             resJson.success = true;
           })
@@ -319,6 +319,7 @@ router.get('/get/:timeline_id_hash', function (req, res, next) {
             headers.push({
               text: m.getText(),
               column_width_percentage: m.getColumnWidthPercentage(),
+              should_show_caption: m.getShouldShowCaption() ? 1 : 0,
             });
           });
 

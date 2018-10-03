@@ -16,6 +16,7 @@ var htElement = document.getElementById("handsontable");
 
 var scrollRowArray = [];
 var rowToSecArray = [];
+var captionEnabledColumnIdx = [];
 
 // main process
 $(function () {
@@ -50,6 +51,7 @@ $(function () {
       initHideEmptyRowButtoon();
       initPrivateButtoon();
       initEditTitle();
+      initCaptionEnabledColumnIdx(data["headers"]);
 
       $(function () {
         $("#tabs").tabs();
@@ -65,6 +67,14 @@ $(function () {
   });
 
 });
+
+function initCaptionEnabledColumnIdx(headers) {
+  __.times(headers.length, function(colIdx) {
+    if (headers[colIdx]["should_show_caption"]) {
+      captionEnabledColumnIdx.push(colIdx);
+    }
+  });
+}
 
 function initOptions(enabledOptionIds, isPrivate) {
   console.log(enabledOptionIds);
@@ -395,6 +405,7 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
             });
           }),
         },
+
         "remove-column": {
           name: "Remove column",
           callback: function (optionName, selected) {
@@ -420,7 +431,35 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
             });
           },
         },
+
+        "caption": {
+          name: function() {
+            var targetColIdx = ht.getSelectedLast()[1];
+            var isEnabled = __.contains(captionEnabledColumnIdx, targetColIdx);
+            return isEnabled ? '<img src="/img/others/check_mark.png" style="width: 1rem; height: 1rem"><span style="font-weight: bold;">Caption</span>' : 'Caption';
+          },
+
+          callback: function (optionName, selected) {
+            var targetColIdx = selected[0].start.col;
+            var isEnabled = __.contains(captionEnabledColumnIdx, targetColIdx);
+
+            if (isEnabled) {
+              // ENABLE => DISABLE
+              captionEnabledColumnIdx = __.filter(captionEnabledColumnIdx, function(n) {
+                return n != targetColIdx;
+              });
+            } else {
+              // DISABLE => ENABLE
+              captionEnabledColumnIdx.push(targetColIdx);
+            }
+          },
+        },
+
       }
+    },
+
+    afterContextMenuShow: function() {
+      console.log("context menu opened");
     },
 
     afterSelection: function (rowPos, columnPos) {
@@ -569,6 +608,12 @@ function initYoutubeVideo(videoId) {
                   },
                 });
 
+                // caption polling
+                (function captionPolling() {
+                  updateVideoCaption();
+                  window.setTimeout(captionPolling, 100);
+                })();
+
                 // NOTE : scrollViewportTo doesnt work on specific browser. maybe a glitch of handsontable
                 // ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
                 // $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
@@ -607,6 +652,20 @@ function initYoutubeVideo(videoId) {
     });
   });
 
+}
+
+function updateVideoCaption() {
+  if (!player) return;
+  var currentVideoTime = parseInt(player.getCurrentTime());
+  var targetRowIdx = scrollRowArray[currentVideoTime];
+
+  var captionHTML = '';
+  __.each(captionEnabledColumnIdx, function(colIdx) {
+    var html = $(ht.getCell(targetRowIdx, colIdx)).html().replace(/\n/g, '<br>');
+    captionHTML += !__.isEmpty(html) ? '<br>' + html : '';
+  });
+  captionHTML = captionHTML.replace('<br>', ''); // remove first unnecessary br
+  $('#video-caption-text').html(captionHTML);
 }
 
 function adjustHandsontableHeight() {
@@ -720,6 +779,7 @@ function submitTimeline(button) {
     json: {
       timeline_title: timelineTitle,
       col_header: ht.getColHeader(),
+      caption_enabled_col_idx: captionEnabledColumnIdx,
       col_width_percentages: colWidthPercentages,
       timeline: ht.getSourceData(),
       tl_admin_password: password,

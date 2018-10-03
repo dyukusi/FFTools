@@ -4,11 +4,12 @@ var db = require(appRoot + '/my_node_libs/db.js');
 var Q = require('q');
 
 exports.TimelineHeader = class TimelineHeader {
-  constructor(timelineId, dispOrder, text, columnWidthPercentage) {
+  constructor(timelineId, dispOrder, text, columnWidthPercentage, shouldShowCaption) {
     this.timelineId = timelineId;
     this.dispOrder = dispOrder;
     this.text = text;
     this.column_width_percentage = columnWidthPercentage;
+    this.shouldShowCaption = shouldShowCaption;
   }
 
   getTimelineId() {
@@ -27,8 +28,12 @@ exports.TimelineHeader = class TimelineHeader {
     return this.column_width_percentage;
   }
 
+  getShouldShowCaption() {
+    return this.shouldShowCaption;
+  }
+
   // static functions
-  static insert(timelineId, dispOrder, text, columnWidthPercentage) {
+  static insert(timelineId, dispOrder, text, columnWidthPercentage, shouldShowCaption) {
     var d = Q.defer();
 
     var con = db.connect(MyConst.DB.DATABASE).con;
@@ -39,7 +44,8 @@ exports.TimelineHeader = class TimelineHeader {
         timeline_id: timelineId,
         disp_order: dispOrder,
         text: text,
-        column_width_percentage: columnWidthPercentage
+        column_width_percentage: columnWidthPercentage,
+        should_show_caption: shouldShowCaption,
       },
       function (error, results, fields) {
         if (error) {
@@ -70,7 +76,8 @@ exports.TimelineHeader = class TimelineHeader {
             row["timeline_id"],
             row["disp_order"],
             row["text"],
-            row["column_width_percentage"]
+            row["column_width_percentage"],
+            row["should_show_caption"]
           ));
         });
       }

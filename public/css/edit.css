@@ -365,3 +365,30 @@ img.draggable-skill {
     border-color: #7a29a3
 }
 
+.movieArea {
+    position: relative;
+}
+
+.movieArea .video-caption-area {
+}
+
+.video-caption-area {
+    margin: auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    /*top: 0px;*/
+    bottom: 4rem;
+    color: #fff;
+    background: rgba(0,0,0, 0.5);
+    text-align: center;
+
+    /*filter:alpha(opacity=50);*/
+    /*-moz-opacity: 0.5;*/
+    /*opacity: 0.5;*/
+}
+
+#video-caption-text {
+    color: white;
+    font-size: 1rem;
+}
