@@ -257,7 +257,7 @@ router.post('/edit/:timeline_id_hash', function (req, res, next) {
         (timelineAdminPassword && timelineModel.getPassword() == crypt.hashed(timelineAdminPassword))
         || (isLogin && userId == timelineModel.getUserId())
       ) {
-        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"], json["timeline_option"])
+        Timeline.updateByIdHash(timelineIdHash, json["timeline"], json["col_header"], json["col_width_percentages"], json["timeline_option"], json["timeline_title"])
           .then(function (result) {
             resJson.success = true;
           })

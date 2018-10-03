@@ -49,6 +49,7 @@ $(function () {
       initColHeaderRenameButton();
       initHideEmptyRowButtoon();
       initPrivateButtoon();
+      initEditTitle();
 
       $(function () {
         $("#tabs").tabs();
@@ -147,6 +148,22 @@ function ToggleHideEmptyRow(forceBool) {
   });
 
   ht.render();
+}
+
+function initEditTitle() {
+  var modal = $('#edit-title-modal');
+
+  // open modal button
+  $('#edit-title-button').on('click', function () {
+    modal.find('#edit-title-input').val($('#timeline-title').text().trim());
+    modal.modal('show');
+  });
+
+  // OK button
+  $('#edit-title-confirm-button').on('click', function () {
+    $('#timeline-title').text($('#edit-title-input').val());
+    modal.modal('hide');
+  });
 }
 
 function initHideEmptyRowButtoon() {
@@ -280,7 +297,6 @@ function initDeleteTimelineButton() {
 
 function initColHeaderRenameButton() {
   $('#col-header-rename-confirm-button').on('click', function () {
-    console.log("ok");
     var modal = $('#col-header-rename-modal').modal();
 
     var newName = $('#col-header-name-input').val();
@@ -673,6 +689,7 @@ function submitTimeline(button) {
     $this.html(loadingText);
   }
 
+  var timelineTitle = $('#timeline-title').text().trim();
   var password = $passwordInput.val();
   var colWidthPercentages = (function () {
     var rowHeaderWidth = getRowHeaderWidth();
@@ -701,6 +718,7 @@ function submitTimeline(button) {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
     json: {
+      timeline_title: timelineTitle,
       col_header: ht.getColHeader(),
       col_width_percentages: colWidthPercentages,
       timeline: ht.getSourceData(),

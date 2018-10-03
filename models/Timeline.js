@@ -392,7 +392,7 @@ exports.Timeline = class Timeline {
     return d.promise;
   }
 
-  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages, timelineOption) {
+  static updateByIdHash(idHash, timeline, colHeader, colWidthPercentages, timelineOption, timelineTitle) {
     var d = Q.defer();
     var con = db.connect(MyConst.DB.DATABASE).con;
 
@@ -556,10 +556,11 @@ exports.Timeline = class Timeline {
         function (arg, callback) {
           // NOTE: 2: Private option id
           var isPrivate = __.contains(timelineOption, 2) ? 1 : 0;
+          var title = timelineTitle ? timelineTitle : 'Please edit title';
 
           con.query(
-            "UPDATE timeline SET is_private = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-            [isPrivate, arg["id"]],
+            "UPDATE timeline SET is_private = ?, title = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            [isPrivate, title, arg["id"]],
             function (error, results, fields) {
               if (error) {
                 callback({error: error,});
