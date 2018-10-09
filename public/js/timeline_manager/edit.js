@@ -10,7 +10,6 @@ require('jquery-ui-dist/jquery-ui.min.js');
 require('bootstrap');
 
 var isCompletedInitProcess = false;
-var isEdited = false;
 var timelineIdHash = location.pathname.split("/").pop();
 var player;
 var state;
@@ -48,7 +47,6 @@ $(function () {
       initOpenReportModalButton();
       initOpenDeleteTimelineModalButton();
       initReportTimelineButton();
-      initConfirmMovePageDialog();
       initColHeaderRenameButton();
       initHideEmptyRowButtoon();
       initPrivateButtoon();
@@ -189,12 +187,6 @@ function initPrivateButtoon() {
   $('#private-button').on('click', function () {
     TogglePrivate();
   });
-}
-
-function initConfirmMovePageDialog() {
-    $(window).on('beforeunload', function () {
-      return isEdited;
-    });
 }
 
 function initOpenReportModalButton() {
@@ -472,7 +464,12 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
 
     afterChange: function () {
       initToolTip();
-      updateIsEditedFlagIfNeed();
+
+      if (isCompletedInitProcess) {
+        $(window).on('beforeunload', function () {
+          return true;
+        });
+      }
     }
   });
 
@@ -817,10 +814,4 @@ function submitTimeline(button) {
 
 function getRowHeaderWidth() {
   return $($('#handsontable .htCore')[2]).outerWidth();
-}
-
-function updateIsEditedFlagIfNeed() {
-  if (isCompletedInitProcess) {
-    isEdited = true;
-  }
 }
