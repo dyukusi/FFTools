@@ -74,6 +74,7 @@ $(function () {
 function initJump(time) {
   if (!time) return;
   ht.selectRows(rowToSecArray[Number(time)]);
+  player.seekTo(time);
   TLScrollTo(time);
   isJumpedByParam = true;
 }
