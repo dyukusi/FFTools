@@ -9,6 +9,8 @@ require('lightbox2');
 require('jquery-ui-dist/jquery-ui.min.js');
 require('bootstrap');
 
+var isCompletedInitProcess = false;
+var isEdited = false;
 var timelineIdHash = location.pathname.split("/").pop();
 var player;
 var state;
@@ -60,6 +62,7 @@ $(function () {
       initToolTip();
       initOptions(data["option_ids"], data["is_private"]);
 
+      isCompletedInitProcess = true;
       console.log("initialization completed");
     }).fail(function () {
       console.log("initialization failed");
@@ -189,9 +192,9 @@ function initPrivateButtoon() {
 }
 
 function initConfirmMovePageDialog() {
-  $(window).on('beforeunload', function () {
-    return true;
-  });
+    $(window).on('beforeunload', function () {
+      return isEdited;
+    });
 }
 
 function initOpenReportModalButton() {
@@ -469,6 +472,7 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
 
     afterChange: function () {
       initToolTip();
+      updateIsEditedFlagIfNeed();
     }
   });
 
@@ -697,7 +701,6 @@ function initToolTip() {
     hide: false,
     tooltipClass: "ui-tooltip"
   });
-  console.log("tooltip");
 }
 
 function initDialog() {
@@ -814,4 +817,10 @@ function submitTimeline(button) {
 
 function getRowHeaderWidth() {
   return $($('#handsontable .htCore')[2]).outerWidth();
+}
+
+function updateIsEditedFlagIfNeed() {
+  if (isCompletedInitProcess) {
+    isEdited = true;
+  }
 }
