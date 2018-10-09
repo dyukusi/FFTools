@@ -9,15 +9,16 @@ require('lightbox2');
 require('jquery-ui-dist/jquery-ui.min.js');
 require('bootstrap');
 
-var isCompletedInitProcess = false;
-var timelineIdHash = location.pathname.split("/").pop();
-var player;
-var state;
-var htElement = document.getElementById("handsontable");
-
-var scrollRowArray = [];
-var rowToSecArray = [];
-var captionEnabledColumnIdx = [];
+// GLOBAL vars
+isCompletedInitProcess = false;
+isJumpedByParam = false;
+timelineIdHash = location.pathname.split("/").pop();
+player = null;
+previousPlayerState = null;
+htElement = document.getElementById("handsontable");
+scrollRowArray = [];
+rowToSecArray = [];
+captionEnabledColumnIdx = [];
 
 // main process
 $(function () {
@@ -59,6 +60,7 @@ $(function () {
     }).done(function () {
       initToolTip();
       initOptions(data["option_ids"], data["is_private"]);
+      initJump(getParam('t'));
 
       isCompletedInitProcess = true;
       console.log("initialization completed");
@@ -68,6 +70,13 @@ $(function () {
   });
 
 });
+
+function initJump(time) {
+  if (!time) return;
+  ht.selectRows(rowToSecArray[Number(time)]);
+  TLScrollTo(time);
+  isJumpedByParam = true;
+}
 
 function initCaptionEnabledColumnIdx(headers) {
   __.times(headers.length, function(colIdx) {
@@ -450,6 +459,21 @@ function initHandsonTable(colHeaders, videoLength, timelineArray) {
           },
         },
 
+        "copy-url": {
+          name: 'Copy URL at current time',
+
+          callback: function (optionName, selected) {
+            var t = rowToSecArray[selected[0].start.row];
+            var result = location.origin + location.pathname + '?t=' + t;
+
+            $('body').append('<textarea id="tempTextArea" style="position:fixed;left:-100%;">'+ result +'</textarea>');
+            $('#tempTextArea').select();
+            document.execCommand('copy');
+            $('#tempTextArea').remove();
+            // alert("URLをコピーしました。");
+          },
+        },
+
       }
     },
 
@@ -565,6 +589,8 @@ function initSplitPane() {
 }
 
 function initYoutubeVideo(videoId) {
+  var d = $.Deferred();
+
   YouTubeIframeLoader.load(function (YT) {
     player = new YT.Player('movieArea', { //ここに表示させる領域のIDを記述する
       height: '100%',
@@ -575,7 +601,7 @@ function initYoutubeVideo(videoId) {
           //event.target.playVideo();　// 動画再生
           //event.target.mute();　// ミュートにする
 
-          var previous;
+          var previousTime;
           var rowHeaders = $('.rowHeader');
 
           // ポーリング
@@ -584,60 +610,35 @@ function initYoutubeVideo(videoId) {
             if (player.getPlayerState() == YT.PlayerState.PLAYING) {
               var currentVideoTime = parseInt(player.getCurrentTime());
 
-              if (previous != currentVideoTime) {
-                previous = currentVideoTime;
-                var targetRowIdx = scrollRowArray[currentVideoTime];
-                var previousRow = $(ht.getCell(targetRowIdx - 1, 0));
+              if (previousTime != currentVideoTime) {
+                TLScrollTo(currentVideoTime);
 
-                // 再生中の時間のセルの背景色を変える
-                ht.updateSettings({
-                  renderAllRows: true,
-                  cells: function (row, col, prop) {
-                    if (scrollRowArray[row] == targetRowIdx) {
-                      var cell = ht.getCell(targetRowIdx, col);
-                      if (cell && cell.style) {
-                        // background
-                        $(cell).css("backgroundColor", "black");
-
-                        // border
-                        $(cell).css("border-top", "1px solid red");
-                        $(cell).css("border-bottom", "1px solid red");
-                        if (col == 0) $(cell).css("border-left", "1px solid red");
-                        if (col == ht.countCols() - 1) $(cell).css("border-right", "1px solid red");
-                      }
-                    }
-                  },
-                });
-
-                // caption polling
-                (function captionPolling() {
-                  updateVideoCaption();
-                  window.setTimeout(captionPolling, 100);
-                })();
-
-                // NOTE : scrollViewportTo doesnt work on specific browser. maybe a glitch of handsontable
-                // ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
-                // $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
-                // var currentRowHeader = $(rowHeaders[currentVideoTime + 1]);
-                // currentRowHeader.addClass('current-row-header');
-
-                // scroll position adjustment
-                var targetCell = $(ht.getCell(targetRowIdx, 0));
-                var headerCells = $('#handsontable thead th');
-
-                var scrollTo = targetCell.position() ? targetCell.position().top - previousRow.outerHeight() - headerCells.outerHeight() : 0 ;
-
-                $('#handsontable .wtHolder').scrollTop(scrollTo);
+                previousTime = currentVideoTime;
               }
             }
 
             window.setTimeout(polling, 100);
           }());
+
+          // caption polling
+          (function captionPolling() {
+            updateVideoCaption();
+            window.setTimeout(captionPolling, 100);
+          })();
+
+          d.resolve();
         },
 
         'onStateChange': function (event) {
-          state = event.data;
+          var currentState = event.data;
+
+          if (isJumpedByParam && previousPlayerState == YT.PlayerState.BUFFERING && currentState == YT.PlayerState.PLAYING) {
+            player.pauseVideo();
+            isJumpedByParam = false;
+          }
+
           initToolTip();
+          previousPlayerState = currentState;
         }
       },
       //ここからカスタマイズ
@@ -653,7 +654,48 @@ function initYoutubeVideo(videoId) {
     });
   });
 
+  return d.promise();
 }
+
+function TLScrollTo(time) {
+  var targetRowIdx = scrollRowArray[time];
+  var previousRow = $(ht.getCell(targetRowIdx - 1, 0));
+
+  // 再生中の時間のセルの背景色を変える
+  ht.updateSettings({
+    renderAllRows: true,
+    cells: function (row, col, prop) {
+      if (scrollRowArray[row] == targetRowIdx) {
+        var cell = ht.getCell(targetRowIdx, col);
+        if (cell && cell.style) {
+          // background
+          $(cell).css("backgroundColor", "black");
+
+          // border
+          $(cell).css("border-top", "1px solid red");
+          $(cell).css("border-bottom", "1px solid red");
+          if (col == 0) $(cell).css("border-left", "1px solid red");
+          if (col == ht.countCols() - 1) $(cell).css("border-right", "1px solid red");
+        }
+      }
+    },
+  });
+
+  // NOTE : scrollViewportTo doesnt work on specific browser. maybe a glitch of handsontable
+  // ht.scrollViewportTo(targetRowIdx, 0); // TODO should consider column also
+  // $('#handsontable .wtHolder')[0].scrollBy(0, -1 * previousRow.outerHeight());
+  // var currentRowHeader = $(rowHeaders[currentVideoTime + 1]);
+  // currentRowHeader.addClass('current-row-header');
+
+  // scroll position adjustment
+  var targetCell = $(ht.getCell(targetRowIdx, 0));
+  var headerCells = $('#handsontable thead th');
+
+  var scrollTo = targetCell.position() ? targetCell.position().top - previousRow.outerHeight() - headerCells.outerHeight() : 0 ;
+
+  $('#handsontable .wtHolder').scrollTop(scrollTo);
+}
+
 
 function updateVideoCaption() {
   if (!player) return;
@@ -814,4 +856,14 @@ function submitTimeline(button) {
 
 function getRowHeaderWidth() {
   return $($('#handsontable .htCore')[2]).outerWidth();
+}
+
+function getParam(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
