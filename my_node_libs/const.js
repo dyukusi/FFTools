@@ -11,6 +11,10 @@ exports.CONFIRMATION_MAIL_TEXT =
   "2. Access %s \n" +
   "3. COMPLETE! :)";
 
+exports.TWITTER_API_KEYS = config.twitter_api;
+exports.TWEET_NEW_TIMELINE_TEXT = "https://www.yukapero.com/fftimelines/edit/%s\n%s has been released!\n#FFTimelines #FF14";
+exports.TWEET_UPDATED_TIMELINE_TEXT = "https://www.yukapero.com/fftimelines/edit/%s\n%s has been updated! #FFTimelines #FF14";
+
 exports.VALIDATION_ERROR_TYPES = {
   INVALID_YOUTUBE_ID: 1,
   TOO_SHORT_PASSWORD: 2,

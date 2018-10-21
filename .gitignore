@@ -2,3 +2,4 @@
 node_modules
 bin/misc/*
 config/*
+bin/twitter_api_sample.js

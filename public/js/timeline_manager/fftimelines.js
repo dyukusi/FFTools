@@ -1,6 +1,6 @@
 require('bootstrap');
 require('chosen-js');
-
+var TwitterWidgetsLoader = require('twitter-widgets');
 var hasNext = true;
 var requestListCount = 0;
 var contentIdToDataMap = null;
@@ -46,6 +46,11 @@ $(function () {
       updateTimelineList(start - 1, { // -1 considers header row
         order_by: 'updated_at',
       });
+
+      // adjsut Twitter Timeline height then load
+      $('#twitter-timeline').attr("data-height", $('#timeline_list').height() - $('#twitter-follow-button').height() - 5);
+      debugger;
+      TwitterWidgetsLoader.load();
 
       callback(null);
     },

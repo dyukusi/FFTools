@@ -67,19 +67,32 @@
 
 </div>
 
-<div id="timeline_list">
-    <table class="table table-hover">
-        <thead>
-        <tr class="d-flex">
-            <th class="col-3" scope="col">for</th>
-            <th class="col-5" scope="col">Title</th>
-            <th class="col-2" scope="col">Made by</th>
-            <th class="col-1" scope="col">Views</th>
-            <th class="col-1" scope="col">Update</th>
-        </tr>
-        </thead>
-        <tbody id="timeline_list_tbody"></tbody>
-    </table>
+<div>
+    <div class="row">
+        <div class="col-10" id="timeline_list">
+            <table class="table table-hover">
+                <thead>
+                <tr class="d-flex">
+                    <th class="col-3" scope="col">for</th>
+                    <th class="col-5" scope="col">Title</th>
+                    <th class="col-2" scope="col">Made by</th>
+                    <th class="col-1" scope="col">Views</th>
+                    <th class="col-1" scope="col">Update</th>
+                </tr>
+                </thead>
+                <tbody id="timeline_list_tbody"></tbody>
+            </table>
+        </div>
+
+        <div class="col-2" id="twitter-timeline-area">
+            <a id="twitter-follow-button" href="https://twitter.com/FFTimelines?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @FFTimelines</a>
+            <!--<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
+            <a id="twitter-timeline" class="twitter-timeline" data-height="0" data-theme="dark" data-chrome="nofooter" href="https://twitter.com/FFTimelines?ref_src=twsrc%5Etfw">
+                Tweets by FFTimelines
+            </a>
+        </div>
+
+    </div>
 </div>
 
 <!-- Create new timeline modal -->

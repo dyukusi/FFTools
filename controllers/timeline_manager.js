@@ -253,6 +253,8 @@ router.post('/edit/:timeline_id_hash', function (req, res, next) {
 
   Timeline.selectByIdHash(timelineIdHash)
     .then(function (timelineModel) {
+      var oldUpdatedAt = timelineModel.getUpdatedAt();
+
       if (
         (timelineAdminPassword && timelineModel.getPassword() == crypt.hashed(timelineAdminPassword))
         || (isLogin && userId == timelineModel.getUserId())
@@ -266,6 +268,11 @@ router.post('/edit/:timeline_id_hash', function (req, res, next) {
           })
           .done(function () {
             res.send(resJson);
+
+            Timeline.selectByIdHash(timelineIdHash)
+              .then(function(newTimelineModel) {
+                MyUtil.tweetTimelineIfNeed(timelineModel, newTimelineModel);
+              });
           });
       } else {
         res.send(resJson);

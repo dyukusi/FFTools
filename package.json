@@ -65,6 +65,8 @@
     "q": "^1.5.1",
     "request-ip": "^2.1.1",
     "sprintf-js": "^1.1.1",
+    "twitter": "^1.7.1",
+    "twitter-widgets": "^2.0.0",
     "underscore": "^1.9.1",
     "validator": "^10.7.1",
     "youtube-iframe": "^1.0.3"
