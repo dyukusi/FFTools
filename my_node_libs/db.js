@@ -8,7 +8,7 @@ function connect(dbName) {
     host: MyConst.DB.HOST,
     user: MyConst.DB.USER,
     password: MyConst.DB.PASSWORD,
-    database: MyConst.DB.DATABASE,
+    database: dbName,
   });
 
   con.connect(function (err) {
