@@ -271,15 +271,15 @@
                     <!-- role -->
                     <div class="job-title">
                         <img class="my-draggable display_tooltip" src="<%= roleModel.getIconPath() %>"
-                             title="<%= roleModel.getName_en() %>">
-                        <%= roleModel.getName_en() %>
+                             title="<%= roleModel.getNameENG() %>">
+                        <%= roleModel.getNameENG() %>
                     </div>
                     <br class="clear">
                     <div>
                         <% __.each(roleSkillModels, function(skillModel) { %>
                         <img class="my-draggable draggable-skill display_tooltip"
                              src="<%= skillModel.getIconPath() %>"
-                             title="<%= skillModel.getName_en() %>">
+                             title="<%= skillModel.getNameENG() %>">
                         <% }); %>
                     </div>
 
@@ -291,15 +291,15 @@
 
                     <div class="job-title">
                         <img class="my-draggable display_tooltip" src="<%= jobModel.getIconPath() %>"
-                             title="<%= jobModel.getName_en() %>">
-                        <%= jobModel.getName_en() %>
+                             title="<%= jobModel.getNameENG() %>">
+                        <%= jobModel.getNameENG() %>
                     </div>
                     <br class="clear">
                     <div>
                         <% __.each(jobSkillModels, function(jobSkillModel) { %>
                         <img class="my-draggable draggable-skill display_tooltip"
                              src="<%= jobSkillModel.getIconPath() %>"
-                             title="<%= jobSkillModel.getName_en() %>">
+                             title="<%= jobSkillModel.getNameENG() %>">
                         <% }); %>
                     </div>
 

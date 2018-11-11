@@ -3,3 +3,8 @@ node_modules
 bin/misc/*
 config/*
 bin/fftrends_scripts/*
+public/img/avatar
+public/img/portrait
+.DS_Store
+public/.DS_Store
+\#.gitignore#

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FFTrends</title>
+    <meta name="viewport" content="width=device-width">
+
+    <% if (!isOpenInModal) { %>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <% } %>
+
+    <link rel="stylesheet" href="/css/snapshot.css">
+</head>
+<body style="background: black;">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-xs-12 portrait-area">
+            <img src="/img/portrait/1/<%= snapshotModel.getId() %>.png" id="snapshot-gear-set-image">
+            <div class="tweet-button">
+
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url="http://localhost:3000/fftrends/snapshot/<%= snapshotModel.getId()%>" data-hashtags="FF14,FFTrends" data-show-count="false">Tweet</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12 snapshot-info-area snapshot-<%= snapshotModel.getId() %>">
+            <div class="gear-set">
+                <%
+                var idx = 0;
+                __.each(EquipmentTypeCollection.getSortedTypeIdArrayForGearSet(), function(equipmentTypeId) {
+                    var gearModel = gearMap[equipmentTypeId];
+                    if (!gearMap[equipmentTypeId]) return;
+
+                    idx++;
+                    var equipmentModel = equipmentMap[gearModel.getEquipmentId()];
+                    var mirageEquipmentModel = equipmentMap[gearModel.getMirageEquipmentId()];
+                    var dyeModel = equipmentMap[gearModel.getDyeId()];
+                %>
+                <div class="row <%= idx % 2 == 0 ? 'equipment-row-1' : 'equipment-row-2' %>">
+                    <div class="col-3 flexiblebox">
+                        <%= EquipmentTypeCollection.getModelById(equipmentTypeId).getNameJP() %>
+                    </div>
+                    <div class="col-9">
+                        <img src="/img/equipment/icon/<%= equipmentModel.getEquipmentTypeId() %>/<%= equipmentModel.getId() %>.png"
+                             class="equipment-icon">
+
+                        <a href="https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/<%= equipmentModel.getId() %>/"
+                           class="eorzeadb_link">
+                            <%= equipmentMap[gearModel.getEquipmentId()].getNameJP() %>
+                        </a>
+
+                        <% if (mirageEquipmentModel) { %>
+                        <div class="row">
+                            <div class="col-12 glamor-row">
+                                <img src="/img/equipment/icon/<%= mirageEquipmentModel.getEquipmentTypeId() %>/<%= mirageEquipmentModel.getId() %>.png"
+                                     class="mirage-equipment-icon">
+
+                                <a href="https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/<%= mirageEquipmentModel.getId() %>/"
+                                   class="eorzeadb_link">
+                                    <%= mirageEquipmentModel.getNameJP() %>
+                                </a>
+
+                                <img src="/img/item/mirage_prism.png" class="mirapuri-icon">
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <% if (dyeModel) { %>
+                        <div class="row">
+                            <div class="col-12 glamor-row">
+                                <img src="/img/equipment/icon/<%= dyeModel.getEquipmentTypeId() %>/<%= dyeModel.getId() %>.png"
+                                     class="mirage-equipment-icon">
+
+                                <a href="https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/<%= dyeModel.getId() %>/"
+                                   class="eorzeadb_link">
+                                    <%= dyeModel.getNameJP() %>
+                                </a>
+                            </div>
+                        </div>
+                        <% } %>
+
+                    </div>
+
+                </div>
+                <% }); %>
+            </div>
+
+            <div class="profile">
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        サーバー
+                    </div>
+                    <div class="col-9">
+                        <%
+                        var DC_ID_TO_NAME = {
+                            1: 'Elemental',
+                            2: 'Gaia',
+                            3: 'Mana',
+                            4: 'Aether',
+                            5: 'Primal',
+                            6: 'Chaos',
+                        };
+                        var serverModel = ServerCollection.getModelById(snapshotModel.getServerId());
+                        %>
+
+                        <%= serverModel.getName() %> (<%= DC_ID_TO_NAME[serverModel.getDcId()] %>)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        キャラクター
+                    </div>
+                    <div class="col-9">
+                        <%
+                        var GENDER_ID_TO_NAME = {
+                            1: '♂',
+                            2: '♀',
+                        };
+                        %>
+                        <a href="https://jp.finalfantasyxiv.com/lodestone/character/<%= snapshotModel.getUserId() %>/"
+                           target="_blank"><%= snapshotModel.getName() %></a>
+                        <%= GENDER_ID_TO_NAME[snapshotModel.getGenderId()] %>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        ジョブ
+                    </div>
+                    <div class="col-9">
+                        <% var jobModel = JobCollection.getModelById(snapshotModel.getJobId()); %>
+                        <img src="<%= jobModel.getIconPath() %>" class="job-icon">
+                        <%= jobModel.getNameJP() %> (Lv <%= snapshotModel.getLevel() %>)
+                    </div>
+                </div>
+
+                <% if (snapshotModel.getTitle()) { %>
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        称号
+                    </div>
+                    <div class="col-9">
+                        <%= snapshotModel.getTitle() %>
+                    </div>
+                </div>
+                <% } %>
+
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        種族
+                    </div>
+                    <div class="col-9">
+                        <%
+                        var RACE_ID_TO_NAME_JP = {
+                            1: 'ヒューラン',
+                            2: 'エレゼン',
+                            3: 'ララフェル',
+                            4: 'ミコッテ',
+                            5: 'ルガディン',
+                            6: 'アウラ',
+                        };
+                        %>
+                        <%= RACE_ID_TO_NAME_JP[snapshotModel.getRaceId()] %>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3 flexiblebox">
+                        データ取得日
+                    </div>
+                    <div class="col-9">
+                        <%= new Date(snapshotModel.getDate() * 1000).toLocaleDateString() %>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <% if (!isOpenInModal) { %>
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <a href="/fftrends" style="font-size: 150%">
+                ◀FFTrendsに戻る
+            </a>
+        </div>
+    </div>
+    <% } %>
+
+</div>
+
+<input id="dummy-form-snapshot-id" type="number" value="<%= snapshotModel.getId() %>" style="display: none;">
+<% if (!isOpenInModal) { %>
+<input id="is-disable-zoom" type="number" value="1" style="display: none;">
+<% } %>
+
+</body>
+</html>
+
+<script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
+<script src="/js/fftrends/compressed/snapshot.min.js" type="text/javascript"></script>

@@ -27,6 +27,7 @@ var usersController = require('./controllers/users');
 var registryController = require('./controllers/registry');
 var loginController = require('./controllers/login');
 var timelineManagerController = require('./controllers/timeline_manager');
+var fftrendsController = require('./controllers/fftrends');
 var apiController = require('./controllers/api');
 
 var ContentTypeCollection = require(appRoot + '/collection/ContentTypeCollection.js').ContentTypeCollection;
@@ -34,12 +35,18 @@ var ContentCollection = require(appRoot + '/collection/ContentCollection.js').Co
 var RoleCollection = require(appRoot + '/collection/RoleCollection.js').RoleCollection;
 var JobCollection = require(appRoot + '/collection/JobCollection.js').JobCollection;
 var SkillCollection = require(appRoot + '/collection/SkillCollection.js').SkillCollection;
+var EquipmentTypeCollection = require(appRoot + '/collection/EquipmentTypeCollection.js').EquipmentTypeCollection;
+var EquipmentCollection = require(appRoot + '/collection/EquipmentCollection.js').EquipmentCollection;
+var ServerCollection = require(appRoot + '/collection/ServerCollection.js').ServerCollection;
 
 var ContentType = require(appRoot + '/models/ContentType.js').ContentType;
 var Content = require(appRoot + '/models/Content.js').Content;
 var Role = require(appRoot + '/models/Role.js').Role;
 var Job = require(appRoot + '/models/Job.js').Job;
 var Skill = require(appRoot + '/models/Skill.js').Skill;
+var EquipmentType = require(appRoot + '/models/EquipmentType.js').EquipmentType;
+var Equipment = require(appRoot + '/models/Equipment.js').Equipment;
+var Server = require(appRoot + '/models/Server.js').Server;
 
 Q.allSettled([
   ContentType.selectAll(),
@@ -47,6 +54,9 @@ Q.allSettled([
   Role.selectAll(),
   Job.selectAll(),
   Skill.selectAll(),
+  EquipmentType.selectAll(),
+  Equipment.selectAll(),
+  Server.selectAll(),
 ])
   .then(function (results) {
     global.ContentTypeCollection = new ContentTypeCollection(results[0].value);
@@ -54,8 +64,10 @@ Q.allSettled([
     global.RoleCollection = new RoleCollection(results[2].value);
     global.JobCollection = new JobCollection(results[3].value);
     global.SkillCollection = new SkillCollection(results[4].value);
+    global.EquipmentTypeCollection = new EquipmentTypeCollection(results[5].value);
+    global.EquipmentCollection = new EquipmentCollection(results[6].value);
+    global.ServerCollection = new ServerCollection(results[7].value);
   });
-
 
 var app = express();
 
@@ -100,6 +112,7 @@ app.use('/users', usersController);
 app.use('/registry', registryController);
 app.use('/login', loginController);
 app.use('/fftimelines', timelineManagerController);
+app.use('/fftrends', fftrendsController);
 app.use('/api', apiController);
 
 // catch 404 and forward to error handler

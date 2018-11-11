@@ -49,7 +49,6 @@ $(function () {
 
       // adjsut Twitter Timeline height then load
       $('#twitter-timeline').attr("data-height", $('#timeline_list').height() - $('#twitter-follow-button').height() - 5);
-      debugger;
       TwitterWidgetsLoader.load();
 
       callback(null);

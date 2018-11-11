@@ -34,3 +34,23 @@ body {
 .chosen-drop .chosen-results {
     max-height: 30rem;
 }
+
+#gear-set-area {
+    margin-bottom: 5px;
+}
+
+#gear-set-area button {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+}
+
+#gear-set-area .col-1 {
+    padding: 0px 3px 0px 3px;
+}
+
+#gear-set-area .col-4, #gear-set-area .col-8, #gear-set-area .col-12 {
+    padding: 0px;
+}

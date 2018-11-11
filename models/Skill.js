@@ -25,11 +25,11 @@ exports.Skill = class Skill {
     return this.job_id;
   }
 
-  getName_en() {
+  getNameENG() {
     return this.name_en;
   }
 
-  getName_ja() {
+  getNameJP() {
     return this.name_ja;
   }
 

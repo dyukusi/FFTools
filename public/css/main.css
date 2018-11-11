@@ -41,25 +41,6 @@
     max-height: 50vh;
 }
 
-#search-options {
-    margin-bottom: 5px;
-}
-
-#search-options button {
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-    height: 100%;
-    font-size: 150%;
-}
-
-#search-options .col-1 {
-    padding: 0px 3px 0px 3px;
-}
-
-#search-options .col-4, #search-options .col-8, #search-options .col-12 {
-    padding: 0px;
-}
 
 #timeline_list th, #timeline_list td {
     overflow: hidden;
@@ -182,7 +163,8 @@ html {
 }
 
 .my-modal-dialog {
-    width: 27rem;
+    width: 100%;
+    max-width: 27rem;
 }
 
 .create-new-timeline-modal {

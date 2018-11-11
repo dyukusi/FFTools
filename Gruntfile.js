@@ -27,6 +27,16 @@ module.exports = function(grunt) {
       fftimelines : {
         src : ['public/js/timeline_manager/fftimelines.js'],
         dest : 'public/js/timeline_manager/compressed/fftimelines.min.js',
+      },
+
+      fftrends : {
+        src : ['public/js/fftrends/fftrends.js'],
+        dest : 'public/js/fftrends/compressed/fftrends.min.js',
+      },
+
+      snapshot : {
+        src : ['public/js/fftrends/snapshot.js'],
+        dest : 'public/js/fftrends/compressed/snapshot.min.js',
       }
     },
 
@@ -54,6 +64,16 @@ module.exports = function(grunt) {
       timelines : {
         files : ['public/js/timeline_manager/fftimelines.js'],  // 監視対象のファイル
         tasks : ['browserify:fftimelines']  // 変更があったら呼ばれるタスク
+      },
+
+      fftrends : {
+        files : ['public/js/fftrends/fftrends.js'],  // 監視対象のファイル
+        tasks : ['browserify:fftrends']  // 変更があったら呼ばれるタスク
+      },
+
+      snapshot : {
+        files : ['public/js/fftrends/snapshot.js'],  // 監視対象のファイル
+        tasks : ['browserify:snapshot']  // 変更があったら呼ばれるタスク
       },
     },
 

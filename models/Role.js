@@ -15,11 +15,11 @@ exports.Role = class Role {
     return this.id;
   }
 
-  getName_en() {
+  getNameENG() {
     return this.name_en;
   }
 
-  getName_ja() {
+  getNameJP() {
     return this.name_ja;
   }
 

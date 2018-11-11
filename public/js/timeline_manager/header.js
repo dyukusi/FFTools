@@ -26,6 +26,8 @@ $(function () {
     } else if (location.pathname.match("fftimelines")) {
       $('#nav-fftimelines').addClass("active");
       // $('#nav-fftimelines').css('pointer-events', 'none');
+    } else if (location.pathname.match("fftrends")) {
+      $('#nav-fftrends').addClass("active");
     }
 
     adjustPageByLoginStatus();

@@ -20,11 +20,11 @@ exports.Job = class Job {
     return this.role_id;
   }
 
-  getName_en() {
+  getNameENG() {
     return this.name_en;
   }
 
-  getName_ja() {
+  getNameJP() {
     return this.name_ja;
   }
 

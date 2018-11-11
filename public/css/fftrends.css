@@ -1,0 +1,296 @@
+#trend-ranking-area .table td, #trend-ranking-area .table th {
+    max-width: 100px;
+    padding: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#trend-ranking-area .table td {
+    text-align: left;
+}
+
+html, body {
+    position: relative;
+    height: 100%;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: black;
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.swiper-pagination-bullet {
+    background: deepskyblue;
+}
+
+.default-accordion-button {
+    width: 100%;
+    background: transparent;
+    color: deepskyblue;
+    border: solid 1px deepskyblue;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.default-accordion-button:hover {
+    color: #fff;
+    background-color: #2387b7;
+    border-color: #2180ac
+}
+
+.ranking-equipment-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.equipment-row {
+    cursor: pointer;
+    color: deepskyblue;
+}
+
+.equipment-row:hover {
+    background-color: #151271;
+}
+
+.item {
+    margin: 0.5em;
+    border: 1px solid #999;
+    float: left;
+    width: 100px;
+    height: 100px;
+
+}
+
+#gear-set-list-area {
+    padding: 20px 40px;
+}
+
+.gear-set-block {
+    width: 15rem;
+    height: auto;
+
+    margin: 0.5em;
+    border: 1px solid darkcyan;
+    float: left;
+
+    cursor: pointer;
+}
+
+.gear-set-block:hover {
+    -webkit-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+    -moz-box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, .6), inset 0 0 20px rgba(255, 255, 255, 1);
+}
+
+.gear-set-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.snapshot-gear-set-image {
+    width: 100%;
+    height: 100%;
+}
+
+/* jBox Modal*/
+.jBox-container {
+    background: black;
+}
+
+#gear-set-area {
+    margin-bottom: 5px;
+}
+
+#gear-set-area button {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#gear-set-area .col-1 {
+    padding: 0px 3px 0px 3px;
+}
+
+#gear-set-area .col-4, #gear-set-area .col-8, #gear-set-area .col-12 {
+    padding: 0px;
+}
+
+.swiper-container {
+    padding-bottom: 1rem;
+}
+
+.equipment-search-modal {
+
+}
+
+#equipment-search-button {
+    width: 100%;
+    height: 100%;
+}
+
+#equipment-search-keyword-input {
+    width: 100%;
+    /*padding: 1rem;*/
+    /*padding-right: 1rem;*/
+}
+
+#equipment-search-keyword-option-row > div.col-md-9.col-xs-12 > div > div.col-9 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#equipment-search-keyword-option-row > div.col-md-9.col-xs-12 > div > div.col-3 {
+    padding-right: 0px;
+}
+
+.ranking-search-panel {
+    border: solid 1px blue;
+}
+
+#equipment-search-tbody td {
+    padding: 0px;
+    color: deepskyblue;
+}
+
+.equipment-serch-result-warning-text {
+    text-align: center;
+    font-weight: bold;
+    color: red !important;
+}
+
+.equipment-search-result-row {
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.equipment-search-result-row:hover {
+    background-color: #151271;
+}
+
+#equipment-search-selected-equipment-name {
+    font-size: 1.5rem;
+    vertical-align: middle;
+}
+
+#equipment-search-selected-equipment-img {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.chosen-container {
+    color: black
+}
+
+#input-target-equipment-type {
+    height: 100%;
+    width: 100%;
+    padding-right: 0px;
+}
+
+#equipment-search-other-option-row select{
+    width: 100%;
+}
+
+#equipment-search-keyword-option-row {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#equipment-search-accordion, #equipment-search-accordion dd {
+    margin-bottom: 0px;
+}
+
+#equipment-search-accordion-area {
+    /*background: gray;*/
+}
+
+#equipment-search-area {
+    padding-bottom: 1rem;
+}
+
+#equipment-search-button {
+    font-size: 1.5rem;
+}
+
+#search-gear-set-button {
+    min-height: 2rem;
+    font-size: 1.5rem;
+}
+
+.div-search-button {
+    padding-top: 1rem;
+}
+
+#ranking-detail-search-option-row select {
+    width: 100%;
+}
+
+#ranking-detail-search-option-row div {
+    padding: 5px;
+}
+
+#ranking-detail-search-button {
+    width: 100%;
+    height: 100%;
+    font-size: 150%;
+}
+
+.selectable-equipment-td {
+    color: deepskyblue;
+}
+
+.selectable-equipment-tr {
+    cursor: pointer;
+}
+
+.selectable-equipment-tr:hover {
+    background-color: #151271;
+}
+
+#ranking-detail-accordion button {
+    font-size: 1.5rem;
+}
+
+.accordion-status-indicator {
+    float: right;
+    font-size: 1.5rem;
+}
+
+hr.style1{
+    border-top: 1px solid #8c8b8b;
+}
+
+.tweet-button {
+    float: right;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.my-title {
+    font-size: 1.3rem;
+    color: darkgray;
+    padding: 0.5rem;
+}

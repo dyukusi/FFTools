@@ -1,0 +1,89 @@
+body {
+    padding-top: 1rem;
+    color: white;
+}
+
+.snapshot-info-area {
+    width: 100%;
+}
+
+.portrait-area img {
+    width: 100%;
+    height: auto;
+}
+
+.jBox-container {
+    border: solid #000a2f;
+}
+
+.jBox-Modal .jBox-title {
+    background: #00134c;
+    border-bottom: initial;
+    padding: 5px;
+    text-align: right;
+}
+
+.equipment-type-name {
+    height: 2rem;
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translateY(-50%) translateX(-50%);*/
+    /*-webkit- transform: translateY(-50%) translateX(-50%);*/
+}
+
+.equipment-icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.mirage-equipment-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+
+.flexiblebox {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center; /* 縦方向中央揃え（Safari用） */
+    align-items: center; /* 縦方向中央揃え */
+    -webkit-justify-content: center; /* 横方向中央揃え（Safari用） */
+    justify-content: center; /* 横方向中央揃え */
+}
+
+.equipment-row-1, .equipment-row-2 {
+    padding: 1px;
+}
+
+.equipment-row-1 {
+    background: #141313;
+}
+
+.glamor-row {
+    margin-left: 0.7rem;
+}
+
+.mirapuri-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.gear-set {
+    border-bottom: solid 1px gray;
+    padding-bottom: 5px;
+}
+
+.profile {
+    padding-top: 5px;
+}
+
+.job-icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+.tweet-button {
+    padding-top: 5px;
+    text-align: right;
+}
