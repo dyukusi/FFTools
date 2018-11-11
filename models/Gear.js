@@ -203,8 +203,23 @@ exports.Gear = class Gear {
     }
 
     if (options.serverId) {
-      sql += ' AND server_id = ? ';
-      placeHolder.push(options.serverId);
+      var serverId = options.serverId;
+
+      // TODO: dirty implementation
+      if (100 < serverId) {
+        // NOTE: 100~ = DC ID
+        var dcId = serverId % 100;
+        var serverModels = ServerCollection.getModelsByDcId(dcId);
+        var serverIds = __.map(serverModels, function(m) {
+          return m.getId();
+        });
+
+        sql += ' AND server_id IN (?) ';
+        placeHolder.push(serverIds);
+      } else {
+        sql += ' AND server_id = ? ';
+        placeHolder.push(options.serverId);
+      }
     }
 
     if (options.jobId) {
@@ -223,7 +238,6 @@ exports.Gear = class Gear {
     }
 
     sql += ' GROUP BY mirage_equipment_id ORDER BY count DESC LIMIT 50;';
-
     var con = db.connect(MyConst.DB.DATABASE).con;
     con.query(sql, placeHolder,
       function (err, rows, fields) {

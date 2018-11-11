@@ -75,12 +75,12 @@ exports.CRYPTO = {
 // 0: DC id
 // 1: alternative id
 exports.DC_NAME_TO_ID_INFO = {
-  Elemental: [1, 100],
-  Gaia:      [2, 101],
-  Mana:      [3, 102],
-  Aether:    [4, 103],
-  Primal:    [5, 104],
-  Chaos:     [6, 105],
+  Elemental: [1, 101],
+  Gaia:      [2, 102],
+  Mana:      [3, 103],
+  Aether:    [4, 104],
+  Primal:    [5, 105],
+  Chaos:     [6, 106],
 };
 
 exports.TEMP_JOB_ID_TO_MY_JOB_ID = {
