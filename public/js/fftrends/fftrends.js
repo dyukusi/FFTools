@@ -388,7 +388,7 @@ function initGearSetClickAction() {
       width: '90%',
       // height: '100%',
       ajax: {
-        url: 'http://localhost:3000/fftrends/snapshot/' + snapshotId,
+        url: MyUtil.getLocationOrigin() + '/fftrends/snapshot/' + snapshotId,
         // reload: 'strict',
         reload: true,
         data: {
@@ -408,7 +408,7 @@ function initGearSetClickAction() {
       onClose: function () {
       },
 
-      title: '<a target="_blank" href="http://localhost:3000/fftrends/snapshot/' + snapshotId + '">新規ウィンドウで開く</a>',
+      title: '<a target="_blank" href="' + MyUtil.getLocationOrigin() + '/fftrends/snapshot/' + snapshotId + '">新規ウィンドウで開く</a>',
     });
 
     jBoxModal.open();

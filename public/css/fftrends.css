@@ -294,3 +294,7 @@ hr.style1{
     color: darkgray;
     padding: 0.5rem;
 }
+
+.jBox-title {
+    background-color: black;
+}
