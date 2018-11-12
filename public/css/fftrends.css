@@ -151,9 +151,7 @@ html, body {
 }
 
 #equipment-search-keyword-input {
-    width: 100%;
-    /*padding: 1rem;*/
-    /*padding-right: 1rem;*/
+    width: 95%;
 }
 
 #equipment-search-keyword-option-row > div.col-md-9.col-xs-12 > div > div.col-9 {
