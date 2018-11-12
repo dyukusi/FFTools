@@ -3,6 +3,8 @@ var router = express.Router();
 var Gear = require(appRoot + '/models/Gear.js').Gear;
 var CharacterSnapshot = require(appRoot + '/models/CharacterSnapshot.js').CharacterSnapshot;
 var Equipment = require(appRoot + '/models/Equipment.js').Equipment;
+var SnapshotViewHistory = require(appRoot + '/models/SnapshotViewHistory.js').SnapshotViewHistory;
+var requestIp = require('request-ip');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -54,6 +56,7 @@ router.get('/', function (req, res, next) {
 router.get('/snapshot/:snapshot_id', function (req, res, next) {
   var par = req.params;
   var query = req.query;
+  var ip = requestIp.getClientIp(req);
   var snapshotId = par["snapshot_id"];
   var isOpenInModal = !!query["isOpenInModal"];
 
@@ -65,10 +68,12 @@ router.get('/snapshot/:snapshot_id', function (req, res, next) {
   Q.allSettled([
     CharacterSnapshot.selectById(snapshotId),
     Gear.selectBySnapshotId(snapshotId),
+    SnapshotViewHistory.selectAndIncrementCountIfNeed(snapshotId, ip),
   ])
     .then(function (results) {
       var snapshotModel = results[0].value;
       var gearModels = results[1].value;
+      var snapshotViewHistoryModel = results[2].value;
 
       var gearMap = __.indexBy(gearModels, function (gearModel) {
         return gearModel.getEquipmentTypeId();
@@ -93,6 +98,7 @@ router.get('/snapshot/:snapshot_id', function (req, res, next) {
             gearMap: gearMap,
             equipmentMap: equipmentMap,
             isOpenInModal: isOpenInModal,
+            snapshotViewHistoryModel: snapshotViewHistoryModel,
           });
         });
     });
