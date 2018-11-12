@@ -12,7 +12,8 @@
 <html>
 <head>
     <title>FFTrends</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
 <body>
 <div id="header"></div>
@@ -22,7 +23,8 @@
         部位別ミラプリランキングTOP10
     </span>
     <span class="tweet-button">
-        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url="https://www.yukapero.com/fftrends" data-hashtags="FF14,FFTrends" data-show-count="false">Tweet</a>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
+           data-url="https://www.yukapero.com/fftrends" data-hashtags="FF14,FFTrends" data-show-count="false">Tweet</a>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </span>
 
@@ -46,7 +48,8 @@
                     <% __.each(equipmentModels, function(equipmentModel) { %>
                     <tr>
                         <th><%= rank++ %></th>
-                        <td class="equipment-row" data-equipment-id="<%= equipmentModel.getId() %>" data-equipment-type-id="<%= equipmentModel.getEquipmentTypeId() %>">
+                        <td class="equipment-row" data-equipment-id="<%= equipmentModel.getId() %>"
+                            data-equipment-type-id="<%= equipmentModel.getEquipmentTypeId() %>">
                             <img src="/img/equipment/icon/<%= equipmentModel.getEquipmentTypeId() %>/<%= equipmentModel.getId() %>.png"
                                  class="ranking-equipment-icon">
                             <%= equipmentModel.getNameJP() %>
@@ -240,11 +243,13 @@
                     <dl id="equipment-search-accordion" class="js-badger-accordion">
                         <dt>
                             <button class="js-badger-accordion-header default-accordion-button search-gear-set-accordion">
-                                <img src="/img/equipment/icon/3/fc7cf521da2.png" id="equipment-search-selected-equipment-img">
+                                <img src="/img/equipment/icon/3/fc7cf521da2.png"
+                                     id="equipment-search-selected-equipment-img">
                                 <span id="equipment-search-selected-equipment-name">
                                     装備名
                                 </span>
-                                <span class="accordion-status-indicator" id="accordion-status-indicator-for-gearset-search">▼</span>
+                                <span class="accordion-status-indicator"
+                                      id="accordion-status-indicator-for-gearset-search">▼</span>
                             </button>
                         </dt>
                         <dd class="badger-accordion__panel js-badger-accordion-panel ranking-search-panel">
@@ -295,12 +300,18 @@
         </div>
 
         <div class="col-sm-2 div-search-button">
-            <button type="button" class="btn btn-outline-primary right-angle-button" id="search-gear-set-button">検索</button>
+            <button type="button" class="btn btn-outline-primary right-angle-button" id="search-gear-set-button">検索
+            </button>
         </div>
     </div>
 
     <div id="gear-set-list-area"></div>
     <div style="clear:both"></div>
+
+    <div class="copy-right">
+        記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。<br>
+        Copyright (C) 2010 - 2018 SQUARE ENIX CO., LTD. All Rights Reserved.
+    </div>
 </div>
 
 </body>
