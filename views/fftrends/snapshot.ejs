@@ -123,16 +123,18 @@
                     </div>
                 </div>
 
+                <% var jobModel = JobCollection.getModelById(snapshotModel.getJobId()); %>
+                <% if (jobModel) { %>
                 <div class="row">
                     <div class="col-3 flexiblebox">
                         ジョブ
                     </div>
                     <div class="col-9">
-                        <% var jobModel = JobCollection.getModelById(snapshotModel.getJobId()); %>
                         <img src="<%= jobModel.getIconPath() %>" class="job-icon">
                         <%= jobModel.getNameJP() %> (Lv <%= snapshotModel.getLevel() %>)
                     </div>
                 </div>
+                <% } %>
 
                 <% if (snapshotModel.getTitle()) { %>
                 <div class="row">
